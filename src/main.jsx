@@ -7,6 +7,7 @@ import App from './App.jsx';
 import Home from './components/Home/home.jsx';
 import Body from './components/Body/body.jsx';
 import Navbar from './components/Navbar/nav.jsx';
+import Login from './components/Login/login.jsx';
 
 
 const router= createBrowserRouter([
@@ -23,8 +24,12 @@ const router= createBrowserRouter([
         element:<Body />
       },
       {
-        path:"/",
+        path:"/navbar",
         element:<Navbar />
+      },
+      {
+        path:"/login",
+        element:<Login />
       },
     ],
   },

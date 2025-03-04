@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
-
+import authService from "../../appright/auth";
+import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
+
+  const navigate=useNavigate()
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,10 +39,17 @@ const LoginPage = () => {
     if (!validateEmail(formData.email) || !validatePassword(formData.password)) {
       return;
     }
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    try{
+      setIsLoading(true)
+      let res=await authService.login({email:formData.email,password:formData.password})
+      setIsLoading(false)
+      navigate("/")
+    }
+    catch(errors)
+    {
+      console.log(errors)
+    }
+
   };
 
   return (
@@ -64,7 +74,8 @@ const LoginPage = () => {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
+                  
+                  autoComplete=""
                   required
                   className={`appearance-none block w-full pl-10 pr-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                   placeholder="Enter your email"
@@ -124,7 +135,7 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            disabled={isLoading || Object.keys(errors).length > 0}
+            
             className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-lg text-white ${isLoading || Object.keys(errors).length > 0 ? 'bg-blue-300' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-colors duration-200`}
           >
             {isLoading ? "Signing in..." : "Sign In"}

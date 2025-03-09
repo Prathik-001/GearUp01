@@ -8,6 +8,10 @@ import Home from './components/Home/home.jsx';
 import Body from './components/Body/body.jsx';
 import Navbar from './components/Navbar/nav.jsx';
 import Login from './components/Login/login.jsx';
+import Shedule from './components/Shedule/shedule.jsx';
+import Cards from './components/Cards/card.jsx';
+import Bcards from './components/Cards/bcard.jsx'
+// import Admin from './components/Admin/admin.jsx'
 
 
 const router= createBrowserRouter([
@@ -31,6 +35,22 @@ const router= createBrowserRouter([
         path:"/login",
         element:<Login />
       },
+      {
+        path:"/shedule",
+        element:<Shedule />
+      },
+      {
+        path:"/car",
+        element:<Cards />
+      },
+      {
+        path:"/bike",
+        element:<Bcards />
+      },
+      // {
+      //   path:"/admin",
+      //   element:<Admin />
+      // },
     ],
   },
 ],)

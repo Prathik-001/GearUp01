@@ -9,7 +9,6 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
   const validateEmail = (email) => /^[^@]+@[^@]+\.[^@]+$/.test(email);
   const validatePassword = (password) => password.length >= 8;
 
@@ -27,8 +26,7 @@ const LoginPage = () => {
         password: !validatePassword(formData.password) ? "Password must be at least 8 characters" : "",
       });
       return;
-    }
-    
+    } 
     try {
       setIsLoading(true);
       await authService.login({ email: formData.email, password: formData.password });

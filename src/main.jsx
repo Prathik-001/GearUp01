@@ -10,8 +10,11 @@ import Navbar from './components/Navbar/nav.jsx';
 import Login from './components/Login/login.jsx';
 import Shedule from './components/Shedule/shedule.jsx';
 import Cards from './components/Cards/card.jsx';
-import Bcards from './components/Cards/bcard.jsx'
-// import Admin from './components/Admin/admin.jsx'
+import Bcards from './components/Cards/bcard.jsx';
+import More from './components/Cards/more.jsx';
+import Not_found from './components/Not_found/notfound.jsx';
+import Singup from './components/Singnup/singnup.jsx'
+import Admin from './components/Admin/admin.jsx'
 
 
 const router= createBrowserRouter([
@@ -47,10 +50,22 @@ const router= createBrowserRouter([
         path:"/bike",
         element:<Bcards />
       },
-      // {
-      //   path:"/admin",
-      //   element:<Admin />
-      // },
+      {
+        path:"/more",
+        element:<More />
+      },
+      {
+        path:"*",
+        element:<Not_found />
+      },
+      {
+        path:"/singup",
+        element:<Singup />
+      },
+      {
+        path:"/admin",
+        element:<Admin />
+      },
     ],
   },
 ],)

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaCar, FaGasPump, FaRoad, FaStar } from "react-icons/fa";
 import { BsLightningChargeFill, BsFuelPump } from "react-icons/bs";
+import{Link} from "react-router-dom";
 
 const VehicleCard = () => {
   const [imageError, setImageError] = useState(false);
@@ -148,12 +149,13 @@ const VehicleCard = () => {
                 {getLuxuryStars(vehicle.luxuryLevel)}
               </div>
 
-              <button
+              <Link to={"/more"}><button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
                 onClick={() => console.log(`Rent ${vehicle.name}`)}
               >
-                Rent Now
+                view more
               </button>
+              </Link>
             </div>
           </div>
         ))}

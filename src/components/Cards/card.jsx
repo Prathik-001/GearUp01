@@ -150,9 +150,7 @@ const VehicleCard = () => {
               </div>
 
               <Link to={"/more"}><button
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
-                onClick={() => console.log(`Rent ${vehicle.name}`)}
-              >
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" >
                 view more
               </button>
               </Link>

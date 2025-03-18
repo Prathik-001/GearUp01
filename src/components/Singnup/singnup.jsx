@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { FiEye, FiEyeOff, FiCheck, FiX } from "react-icons/fi";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+import authService  from "../../appright/auth";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const navigate=useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -103,14 +106,22 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+    try{
+      setIsLoading(true);
+     let res = await authService.createAccount({ name: formData.username, email: formData.email, phone: formData.phone, password: formData.password });
+     console.log(res)
+     navigate("/")
+    }
+    catch(error){
+      console.log(error)
+      
+    }
     
-    // Simulating API call
-    setTimeout(() => {
-      setIsLoading(false);
-      alert("Sign up successful!");
-    }, 2000);
+    // // Simulating API call
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    //   alert("Sign up successful!");
+    // }, 2000);
   };
   
 
@@ -128,7 +139,7 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center mt-0">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg mt-5">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg ">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
           <p className="mt-2 text-center text-sm text-gray-600">
@@ -136,7 +147,7 @@ const Signup = () => {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
@@ -255,6 +266,7 @@ const Signup = () => {
             <button
               type="submit"
               disabled={!isFormValid() || isLoading}
+              onClick={handleSubmit}
               className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${isFormValid() ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out`}
             >
               {isLoading ? (
@@ -264,38 +276,6 @@ const Signup = () => {
                 </svg>
               ) : "Sign up"}
             </button>
-          </div>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              <button
-                type="button"
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              >
-                <FaGoogle className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              >
-                <FaFacebook className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              >
-                <FaApple className="h-5 w-5" />
-              </button>
-            </div>
           </div>
         </form>
       </div>

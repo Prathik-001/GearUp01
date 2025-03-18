@@ -7,10 +7,10 @@ const VehicleCard = () => {
   const vehicleData = {
     name: "2024 Mercedes-Benz S-Class",
     type: "Luxury Sedan",
-    image: "https://images.unsplash.com/photo-1622200294023-4d2c3fe76ecd",
+    image: "https://cdni.autocarindia.com/Utils/ImageResizer.ashx?n=https://cdni.autocarindia.com/ExtraImages/20210603020343_Honda_CRF300L.jpg&w=700&c=1",
     specifications: {
       fuelType: "Hybrid",
-      transmission: "Automatic",
+      mileage: "20 km/L",
       seatingCapacity: 5,
       luggageCapacity: "520L"
     },
@@ -18,7 +18,6 @@ const VehicleCard = () => {
       pricePerDay: 299,
       minDays: 1,
       maxDays: 30,
-      discount: "15% off on weekly rentals",
       conditions: "Valid driver's license and credit card required"
     },
     features: {
@@ -26,7 +25,9 @@ const VehicleCard = () => {
       gps: true,
       bluetooth: true,
       doors: 4,
-      mileage: "20 km/L"
+      transmission: "Automatic",
+      Sunroof:true,
+      
     }
   };
 
@@ -35,7 +36,7 @@ const VehicleCard = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-4xl mx-auto p-4 mt">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
         {/* Image Section */}
         <div className="relative h-64 overflow-hidden">
@@ -44,9 +45,7 @@ const VehicleCard = () => {
             alt={vehicleData.name}
             className="w-full h-full object-cover"
             loading="lazy"
-            onError={(e) => {
-              e.target.src = "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf";
-            }}
+
           />
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
             <h2 className="text-2xl font-bold text-white">{vehicleData.name}</h2>
@@ -60,7 +59,7 @@ const VehicleCard = () => {
         <div className="p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <InfoItem icon={<FaGasPump />} label="Fuel" value={vehicleData.specifications.fuelType} />
-            <InfoItem icon={<FaCogs />} label="Transmission" value={vehicleData.specifications.transmission} />
+            <InfoItem icon={<FaTachometerAlt />} label="Mileage" value={vehicleData.specifications.mileage} />
             <InfoItem icon={<FaUsers />} label="Seats" value={vehicleData.specifications.seatingCapacity} />
             <InfoItem icon={<FaSuitcase />} label="Luggage" value={vehicleData.specifications.luggageCapacity} />
           </div>
@@ -70,11 +69,10 @@ const VehicleCard = () => {
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-600">Rental Price</p>
-                <p className="text-3xl font-bold text-blue-600">${vehicleData.rental.pricePerDay}</p>
+                <p className="text-3xl font-bold text-blue-600">{vehicleData.rental.pricePerDay}</p>
                 <p className="text-sm text-gray-500">per day</p>
               </div>
               <div className="text-right">
-                <p className="text-green-500 font-semibold">{vehicleData.rental.discount}</p>
                 <button
                   className="mt-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                   onClick={handleExpandClick}
@@ -92,7 +90,9 @@ const VehicleCard = () => {
               <Feature icon={<FaMapMarkedAlt />} label="GPS Navigation" available={vehicleData.features.gps} />
               <Feature icon={<FaBluetooth />} label="Bluetooth" available={vehicleData.features.bluetooth} />
               <Feature icon={<FaDoorOpen />} label="Doors" value={vehicleData.features.doors} />
-              <Feature icon={<FaTachometerAlt />} label="Mileage" value={vehicleData.features.mileage} />
+              <Feature icon={<FaCogs />} label="Transmission" value={vehicleData.features.transmission} />
+              <Feature icon={<FaCogs />} label="Sunroof" available={vehicleData.features.Sunroof} />
+
             </div>
 
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">

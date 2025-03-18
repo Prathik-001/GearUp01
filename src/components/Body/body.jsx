@@ -93,9 +93,9 @@ const HomePage = () => {
                   <p className="text-gray-600 mb-4">{vehicle.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-blue-600 font-bold text-xl">{vehicle.price}</span>
-                    <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                    <Link to={"/car"}><button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">
                       Explore
-                    </button>
+                    </button></Link>
                   </div>
                 </div>
               </div>

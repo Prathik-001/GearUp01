@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { BsThreeDotsVertical, BsPerson, BsCarFront, BsCalendarCheck, BsBarChart, BsSun, BsMoon } from "react-icons/bs";
 import { Line, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
-
+import{Link} from "react-router-dom";
 const mockData = {
   users: [
     { id: 1, name: "John Doe", email: "john@example.com", phone: "+1234567890", registrationDate: "2024-01-15" },
@@ -171,7 +171,7 @@ const AdminPanel = () => {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-semibold">Vehicles Management</h2>
-                  <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Add New Vehicle</button>
+                  <link to={'/add'}><button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Add New Vehicle</button></link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {mockData.vehicles.map(vehicle => (

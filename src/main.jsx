@@ -15,6 +15,7 @@ import More from './components/Cards/more.jsx';
 import Not_found from './components/Not_found/notfound.jsx';
 import Singup from './components/Singnup/singnup.jsx'
 import Admin from './components/Admin/admin.jsx'
+import Add from './components/Admin/add.jsx';
 
 
 const router= createBrowserRouter([
@@ -65,6 +66,10 @@ const router= createBrowserRouter([
       {
         path:"/admin",
         element:<Admin />
+      },
+      {
+        path:"/add",
+        element:<Add />
       },
     ],
   },

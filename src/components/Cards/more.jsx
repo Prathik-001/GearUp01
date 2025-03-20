@@ -5,9 +5,9 @@ const VehicleCard = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const vehicleData = {
-    name: "2024 Mercedes-Benz S-Class",
-    type: "Luxury Sedan",
-    image: "https://cdni.autocarindia.com/Utils/ImageResizer.ashx?n=https://cdni.autocarindia.com/ExtraImages/20210603020343_Honda_CRF300L.jpg&w=700&c=1",
+    name: "Tesla Model S Plaid",
+    type: "Muv",
+    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399",
     specifications: {
       fuelType: "Hybrid",
       mileage: "20 km/L",
@@ -15,7 +15,7 @@ const VehicleCard = () => {
       luggageCapacity: "520L"
     },
     rental: {
-      pricePerDay: 299,
+      pricePerDay: 10000,
       minDays: 1,
       maxDays: 30,
       conditions: "Valid driver's license and credit card required"
@@ -69,7 +69,7 @@ const VehicleCard = () => {
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-600">Rental Price</p>
-                <p className="text-3xl font-bold text-blue-600">{vehicleData.rental.pricePerDay}</p>
+                <p className="text-3xl font-bold text-blue-600">₹{vehicleData.rental.pricePerDay}</p>
                 <p className="text-sm text-gray-500">per day</p>
               </div>
               <div className="text-right">

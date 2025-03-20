@@ -14,7 +14,7 @@ const VehicleCard = () => {
       range: "520",
       type: "Muv",
       fuelType: "Electric",
-      luxuryLevel: 1,
+      luxuryLevel: 5,
     },
     {
       id: 2,
@@ -81,7 +81,7 @@ const VehicleCard = () => {
 
   const getLuxuryStars = (level) => {
     return [...Array(level)].map((_, index) => (
-      <FaStar key={index} className="text-yellow-400" />
+      <FaStar key={index} className="text-yellow-400 mb-2" />
     ));
   };
 
@@ -104,7 +104,7 @@ const VehicleCard = () => {
     setImageError(true);
     e.target.src = "https://images.unsplash.com/photo-1511919884226-fd3cad34687c";
   };
-
+//Body of cards
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaCar, FaGasPump, FaCogs, FaUsers, FaSuitcase, FaSnowflake, FaMapMarkedAlt, FaBluetooth, FaDoorOpen, FaTachometerAlt } from "react-icons/fa";
+import { FaCar, FaGasPump, FaCogs, FaUsers, FaSuitcase, FaSnowflake, FaMapMarkedAlt, FaFilm, FaDoorOpen, FaTachometerAlt,FaSun } from "react-icons/fa";
 
 const VehicleCard = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -88,10 +88,10 @@ const VehicleCard = () => {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-4">
               <Feature icon={<FaSnowflake />} label="Air Conditioning" available={vehicleData.features.airConditioning} />
               <Feature icon={<FaMapMarkedAlt />} label="GPS Navigation" available={vehicleData.features.gps} />
-              <Feature icon={<FaBluetooth />} label="Bluetooth" available={vehicleData.features.bluetooth} />
+              <Feature icon={<FaFilm />} label="Entertainment" available={vehicleData.features.bluetooth} />
               <Feature icon={<FaDoorOpen />} label="Doors" value={vehicleData.features.doors} />
               <Feature icon={<FaCogs />} label="Transmission" value={vehicleData.features.transmission} />
-              <Feature icon={<FaCogs />} label="Sunroof" available={vehicleData.features.Sunroof} />
+              <Feature icon={<FaSun />} label="Sunroof" available={vehicleData.features.Sunroof} />
 
             </div>
 

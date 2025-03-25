@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom';
 import { createBrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store/store.js';
 import './index.css';
 import App from './App.jsx';
 import Home from './components/Home/home.jsx';
@@ -16,6 +18,7 @@ import Not_found from './components/Not_found/notfound.jsx';
 import Singup from './components/Singnup/singnup.jsx'
 import Admin from './components/Admin/admin.jsx'
 import Add from './components/Admin/add.jsx';
+import Userdash from './components/Userdash/userdash.jsx';
 
 
 const router= createBrowserRouter([
@@ -71,12 +74,18 @@ const router= createBrowserRouter([
         path:"/add",
         element:<Add />
       },
+      {
+        path:"/userdash",
+        element:<Userdash />
+      },
     ],
   },
 ],)
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <Provider store={store}>
     <RouterProvider router={router} />
+    </Provider>
   </StrictMode>,
 )
 export default router

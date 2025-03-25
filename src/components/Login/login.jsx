@@ -2,6 +2,9 @@ import { useState } from "react";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
 import authService from "../../appright/auth";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/authSlice";
+
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -11,6 +14,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const validateEmail = (email) => /^[^@]+@[^@]+\.[^@]+$/.test(email);
   const validatePassword = (password) => password.length >= 8;
+  const dispatch=useDispatch();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,9 +33,13 @@ const LoginPage = () => {
     } 
     try {
       setIsLoading(true);
-      await authService.login({ email: formData.email, password: formData.password });
+      const user=await authService.login({ email: formData.email, password: formData.password });
+      if (user) {
+        console.log(user);
+        dispatch(login(user));
       setIsLoading(false);
       navigate("/");
+      }
     } catch (error) {
       setIsLoading(false);
       setErrors({ form: "Invalid email or password. Please try again." });

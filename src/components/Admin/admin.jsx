@@ -171,7 +171,7 @@ const AdminPanel = () => {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-semibold">Vehicles Management</h2>
-                  <link to={'/add'}><button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Add New Vehicle</button></link>
+                  <Link to={'/add'}><button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Add New Vehicle</button></Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {mockData.vehicles.map(vehicle => (

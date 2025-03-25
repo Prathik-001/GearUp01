@@ -2,7 +2,8 @@ import { useState, useCallback } from "react";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
-
+import service from "../../appright/conf";
+import authService from "../../appright/auth";
 const VehicleRentalForm = () => {
   const [formData, setFormData] = useState({
     image: null,
@@ -22,7 +23,7 @@ const VehicleRentalForm = () => {
     transmissionType: "",
     numberOfDoors: "",
     conditions: "",
-    rating: 0
+    rating: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -68,10 +69,20 @@ const VehicleRentalForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Form submitted:", formData);
+    try {
+      if(image){
+        const img = service.uploadFile(im);
+      }
+      const res= await service.createDcoument({})
+      if(res){
+        console.log(res);
+
+      }
+      
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -106,7 +117,7 @@ const VehicleRentalForm = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-8 divide-y divide-gray-200">
+        <form  className="space-y-8 divide-y divide-gray-200">
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Vehicle Information and Rental Card</h2>
@@ -325,7 +336,7 @@ const VehicleRentalForm = () => {
 
                 <div className="flex items-center justify-between">
                   <span className="flex-grow flex flex-col">
-                    <span className="text-sm font-medium text-gray-700">Bluetooth</span>
+                    <span className="text-sm font-medium text-gray-700">Entertiment</span>
                   </span>
                   <button
                     type="button"

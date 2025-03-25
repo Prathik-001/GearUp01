@@ -3,6 +3,8 @@ import { FiEye, FiEyeOff, FiCheck, FiX } from "react-icons/fi";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import authService  from "../../appright/auth";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/authSlice"
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +21,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch=useDispatch();
 
   const validateUsername = (username) => {
     const regex = /^[a-zA-Z0-9]{4,20}$/;
@@ -109,9 +112,13 @@ const Signup = () => {
     try{
       setIsLoading(true);
      let res = await authService.createAccount({ name: formData.username, email: formData.email, phone: formData.phone, password: formData.password });
-     console.log(res)
-     navigate("/")
+      if (res) {
+        console.log(res);
+        dispatch(login(res));
+        setIsLoading(false);
+        navigate("/")
     }
+   }
     catch(error){
       console.log(error)
       

@@ -19,6 +19,7 @@ import Singup from './components/Singnup/singnup.jsx'
 import Admin from './components/Admin/admin.jsx'
 import Add from './components/Admin/add.jsx';
 import Userdash from './components/Userdash/userdash.jsx';
+import About from './components/About/about.jsx';
 
 
 const router= createBrowserRouter([
@@ -77,6 +78,10 @@ const router= createBrowserRouter([
       {
         path:"/userdash",
         element:<Userdash />
+      },
+      {
+        path:"/about",
+        element:<About />
       },
     ],
   },

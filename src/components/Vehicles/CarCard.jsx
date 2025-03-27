@@ -5,16 +5,14 @@ import{Link} from "react-router-dom";
 import service from "../../appright/conf.js"
 const VehicleCard = ({vehicle}) => {
   const [fileId, setFileId] = useState(vehicle?.imageId);
-  useEffect(()=>{
-    setFileId(vehicle.imageId);
-  },[])
+
   const getFuelTypeIcon = (fuelType) => {
     switch (fuelType) {
       case "Electric":
         return (
           <div className="flex items-center gap-1">
-            <BsLightningChargeFill className="text-blue-500" />
-            <span className="text-blue-500 text-sm">{fuelType}</span>
+            <BsLightningChargeFill className="text-blue-700" />
+            <span className="text-blue-700 text-sm">{fuelType}</span>
           </div>
         );
       case "Hybrid":
@@ -31,11 +29,18 @@ const VehicleCard = ({vehicle}) => {
               <span className="text-green-500 text-sm">{fuelType}</span>
             </div>
           );
+        case "CNG":
+            return (
+              <div className="flex items-center gap-1">
+                <BsFuelPump className="text-blue-300" />
+                <span className="text-blue-300 text-sm">{fuelType}</span>
+              </div>
+          );
       default:
         return (
           <div className="flex items-center gap-1">
-            <FaGasPump className="text-red-500" />
-            <span className="text-red-500 text-sm">{fuelType}</span>
+            <FaGasPump className="text-yellow-500" />
+            <span className="text-yellow-500 text-sm">{fuelType}</span>
           </div>
         );
     }
@@ -49,13 +54,19 @@ const VehicleCard = ({vehicle}) => {
 
   const getTypeColor = (type) => {
     switch (type) {
-      case "Sedan":
+      case "SEDAN":
         return "bg-blue-100 text-blue-800";
       case "SUV":
         return "bg-green-100 text-green-800";
-      case "Convertible":
+      case "MPV":
+        return "bg-yellow-100 text-yellow-800";
+      case "HATCHBACK":
+        return "bg-orange-100 text-orange-800";
+      case "COUPE":
+        return "bg-slate-100 text-slate-800";
+      case "CONVERTIBLES":
         return "bg-purple-100 text-purple-800";
-      case "Muv":
+      case "SPORT":
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -65,7 +76,7 @@ const VehicleCard = ({vehicle}) => {
 
 //Body of cards
   return vehicle? (
-      <div className="w-[400px]">
+      <div className="w-[280px]">
           <div
             className="size-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
           >
@@ -100,7 +111,7 @@ const VehicleCard = ({vehicle}) => {
                 {getLuxuryStars(vehicle.rating)}
               </div>
 
-              <Link to={"/more"}><button
+              <Link to={`/car-info/${vehicle.$id}`}><button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300" >
                 view more
               </button>

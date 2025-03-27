@@ -99,18 +99,18 @@ export class Service {
   //   }
   // }
 
-  // async getCourse(id) {
-  //   try {
-  //     return await this.database.getDocument(
-  //       conf.appWriteDatabaseId,
-  //       conf.appWriteCollectionId,
-  //       id
-  //     );
-  //   } catch (error) {
-  //     console.log("Appwrite service :: getData :: error " + error);
-  //     return false;
-  //   }
-  // }
+  async getCarInfo(id) {
+    try {
+      return await this.database.getDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollectionId,
+        id
+      );
+    } catch (error) {
+      console.log("Appwrite service :: getData :: error " + error);
+      return false;
+    }
+  }
 
   // async getCourseByTopic(topic) {
   //   try {

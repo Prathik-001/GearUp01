@@ -22,7 +22,7 @@ import Userdash from './components/Userdash/userdash.jsx';
 import About from './components/About/about.jsx';
 import ViewAllCars from './components/Vehicles/ViewAllCars.jsx'
 // import ViewAllBikes from './components/Vehicles/ViewAllBikes.jsx'
-
+import CarInfo from "./components/Cards/more.jsx"
 const router= createBrowserRouter([
   {
     path:"/",
@@ -51,6 +51,10 @@ const router= createBrowserRouter([
       {
         path:"/car",
         element:<ViewAllCars />
+      },
+      {
+        path:"/car-info/:id",
+        element:<CarInfo />
       },
       // {
       //   path:"/bike",

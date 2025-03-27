@@ -88,8 +88,7 @@ const ViewAllCar = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 w-full">
-      <div className="w-full px-4 py-8">
+    <div className=" flex gap-4 min-h-screen bg-white w-full px-2 py-2">
         <button
           className="lg:hidden mb-4 p-2 bg-blue-500 text-white rounded"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -97,9 +96,9 @@ const ViewAllCar = () => {
           {isSidebarOpen ? "Close Filters" : "Show Filters"}
         </button>
 
-        <div className="flex gap-4 w-full">
           {/* Sidebar */}
-          <div className={`w-1/4 bg-white p-6 rounded-lg shadow-md ${isSidebarOpen ? "block" : "hidden lg:block"}`}>
+          <div className="flex w-1/5 ">
+          <div className={` flex fixed  bg-gray-100  p-6 rounded-lg shadow-md h-auto ${isSidebarOpen ? "block" : "hidden lg:block"}`}>
             {/* Search Bar */}
             <div className="mb-6 relative flex gap-2">
               <input
@@ -116,9 +115,9 @@ const ViewAllCar = () => {
             </div>
 
             {/* Vehicle Type */}
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-4">Vehicle Type</h3>
-              <div className="space-y-2">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold mb-2">Vehicle Type</h3>
+              <div className="space-y-1">
                 {vehicleTypes.map((type) => (
                   <label key={type} className="flex items-center space-x-2">
                     <input
@@ -135,9 +134,9 @@ const ViewAllCar = () => {
             </div>
 
             {/* Fuel Type */}
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-4">Fuel Type</h3>
-              <div className="space-y-2">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold mb-2">Fuel Type</h3>
+              <div className="space-y-1">
                 {fuelTypes.map((type) => (
                   <label key={type.name} className="flex items-center space-x-2">
                     <input
@@ -154,8 +153,8 @@ const ViewAllCar = () => {
             </div>
 
             {/* Mileage */}
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-4">Mileage</h3>
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold mb-2">Mileage</h3>
               <select
                 value={selectedMileage}
                 onChange={(e) => setSelectedMileage(e.target.value)}
@@ -172,19 +171,25 @@ const ViewAllCar = () => {
             <button onClick={clearFilters} className="w-full py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
               Clear All Filters
             </button>
+            <button onClick={clearFilters} className="w-full py-2 mt-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+              search
+            </button>
           </div>
+          </div>
+          {/* </div> */}
+          
 
           {/* Vehicles List */}
-          <div className=" bg-white px-4 py-5 w-9/12">
+          <div className=" px-4 py-5 bg-gray-200 w-4/5  rounded-lg ">
             {vehicles?.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 No vehicles found matching your criteria
               </div>
             ) : (
-              <div className="w-full grid grid-cols-4 md:grid-cols-2 gap-2">
+              <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
               {
               vehicles.map((vehicle) => (
-                <div key={Math.random()*20} className=" rounded-lg  overflow-hidden transition-transform hover:scale-105">
+                <div key={Math.random()*20} className=" rounded-lg  gap-1 overflow-hidden transition-transform hover:scale-95">
                   <VehicleCard vehicle={vehicle} />
                 </div>
               ))}
@@ -192,8 +197,6 @@ const ViewAllCar = () => {
             )}
           </div>
         </div>
-      </div>
-    </div>
   );
 };
 

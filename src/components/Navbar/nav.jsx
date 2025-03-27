@@ -33,10 +33,8 @@ function Navbar() {
         <div className="flex items-center justify-between">
           <div className="text-3xl font-bold text-blue-600">GearUp</div>
           <nav className="hidden md:flex space-x-8">
-          <Link to="/about" className="text-gray-600 hover:text-blue-600 transition-colors">about</Link>
-          <Link to="/bike" className="text-gray-600 hover:text-blue-600 transition-colors">bike</Link>
-
-            <Link to="/" className="text-gray-600 hover:text-blue-600 transition-colors">Home</Link>
+          <Link to="/" className="text-gray-600 hover:text-blue-600 transition-colors">Home</Link>
+          <Link to="/about" className="text-gray-600 hover:text-blue-600 transition-colors">About</Link>
             {!authStatus ? (
               <>
                 <Link to="/login" className="text-gray-600 hover:text-blue-600 transition-colors">Login</Link>

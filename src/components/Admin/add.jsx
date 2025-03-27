@@ -212,20 +212,13 @@ const VehicleRentalForm = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Vehicle Type *</label>
-                  <select
+                  <input
+                    type="text"
                     name="vehicleType"
                     value={formData.vehicleType}
                     onChange={handleInputChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  >
-                    <option value="">Select type</option>
-                    <option value="sedan">Sedan</option>
-                    <option value="suv">SUV</option>
-                    <option value="hatchback">Hatchback</option>
-                    <option value="luxury">Luxury</option>
-                    <option value="sports">Sports Car</option>
-                    <option value="convertible">Convertible</option>
-                  </select>
+                  />
                   {errors.vehicleType && (
                     <p className="mt-2 text-sm text-red-600">{errors.vehicleType}</p>
                   )}
@@ -290,18 +283,13 @@ const VehicleRentalForm = () => {
               <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Fuel Type *</label>
-                  <select
+                  <input
+                  type="text"
                     name="fuelType"
                     value={formData.fuelType}
                     onChange={handleInputChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  >
-                    <option value="">Select fuel type</option>
-                    <option value="petrol">Petrol</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="electric">Electric</option>
-                    <option value="hybrid">Hybrid</option>
-                  </select>
+                  />
                   {errors.fuelType && (
                     <p className="mt-2 text-sm text-red-600">{errors.fuelType}</p>
                   )}
@@ -309,16 +297,13 @@ const VehicleRentalForm = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Transmission Type *</label>
-                  <select
+                  <input
+                  type="text"
                     name="transmissionType"
                     value={formData.transmissionType}
                     onChange={handleInputChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  >
-                    <option value="">Select transmission</option>
-                    <option value="automatic">Automatic</option>
-                    <option value="manual">Manual</option>
-                  </select>
+                  />
                 </div>
               </div>
 

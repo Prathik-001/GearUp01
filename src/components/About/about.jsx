@@ -2,8 +2,6 @@ import React from 'react';
 import { FaCar, FaMotorcycle, FaMoneyBillWave, FaCalendarAlt, FaTools, FaClock } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-
-
 export const about = () => {
   const team = [
     {

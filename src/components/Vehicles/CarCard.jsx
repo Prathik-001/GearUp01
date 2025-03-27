@@ -1,51 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCar, FaGasPump, FaRoad, FaStar } from "react-icons/fa";
 import { BsLightningChargeFill, BsFuelPump } from "react-icons/bs";
 import{Link} from "react-router-dom";
-
-const VehicleCard = ({car}) => {
-  const [imageError, setImageError] = useState(false);
-
-  const vehicles = [
-    {
-      id: 1,
-      name: "Tesla Model S Plaid",
-      image: "https://images.unsplash.com/photo-1617788138017-80ad40651399",
-      range: "520",
-      type: "Muv",
-      fuelType: "Electric",
-      luxuryLevel: 5,
-    },
-    {
-      id: 2,
-      name: "BMW X7 xDrive",
-      image: "https://images.unsplash.com/photo-1556189250-72ba954cfc2b",
-      range: "750",
-      type: "SUV",
-      fuelType: "Diesel",
-      luxuryLevel: 4,
-    },
-    {
-      id: 3,
-      name: "Mercedes-Benz S-Class",
-      image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8",
-      range: "680",
-      type: "Sedan",
-      fuelType: "Hybrid",
-      luxuryLevel: 5,
-    },
-    {
-      id: 4 ,
-      name: "BMW X7 xDrive",
-      image: "https://images.unsplash.com/photo-1556189250-72ba954cfc2b",
-      range: "750",
-      type: "SUV",
-      fuelType: "Petrol",
-      luxuryLevel: 4,
-    },
-
-  ];
-
+import service from "../../appright/conf.js"
+const VehicleCard = ({vehicle}) => {
+  const [fileId, setFileId] = useState(vehicle?.imageId);
+  useEffect(()=>{
+    setFileId(vehicle.imageId);
+  },[])
   const getFuelTypeIcon = (fuelType) => {
     switch (fuelType) {
       case "Electric":
@@ -100,40 +62,29 @@ const VehicleCard = ({car}) => {
     }
   };
 
-  const handleImageError = (e) => {
-    setImageError(true);
-    e.target.src = "https://images.unsplash.com/photo-1511919884226-fd3cad34687c";
-  };
+
 //Body of cards
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
-        {vehicles.map((vehicle) => (
+  return vehicle? (
+      <div className="w-[400px]">
           <div
-            key={vehicle.id}
-            className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
-            role="article"
-            aria-label={`${vehicle.name} rental card`}
+            className="size-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
           >
-            <div className="relative h-48 overflow-hidden">
+            <div className=" h-48 overflow-hidden">
               <img
-                src={vehicle.image}
-                alt={vehicle.name}
-                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                onError={handleImageError}
-                loading="lazy"
+                src={service.getFilePreiview(fileId)}
+                className="w-full h-full object-cover"
               />
             </div>
 
             <div className="p-6 space-y-4">
               <h2 className="text-2xl font-bold text-gray-800 line-clamp-2">
-                {vehicle.name}
+                {vehicle.vehicleName}
               </h2>
 
               <div className="flex items-center justify-between">
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTypeColor(vehicle.type)}`}>
+                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTypeColor(vehicle.vehicleType)}`}>
                   <FaCar className="inline mr-1" />
-                  {vehicle.type}
+                  {vehicle.vehicleType}
                 </span>
                 {getFuelTypeIcon(vehicle.fuelType)}
               </div>
@@ -146,7 +97,7 @@ const VehicleCard = ({car}) => {
               </div>
 
               <div className="flex items-center space-x-1">
-                {getLuxuryStars(vehicle.luxuryLevel)}
+                {getLuxuryStars(vehicle.rating)}
               </div>
 
               <Link to={"/more"}><button
@@ -156,10 +107,8 @@ const VehicleCard = ({car}) => {
               </Link>
             </div>
           </div>
-        ))}
-      </div>
     </div>
-  );
+  ):null;
 };
 
 export default VehicleCard;

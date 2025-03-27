@@ -20,7 +20,8 @@ import Admin from './components/Admin/admin.jsx'
 import Add from './components/Admin/add.jsx';
 import Userdash from './components/Userdash/userdash.jsx';
 import About from './components/About/about.jsx';
-
+import ViewAllCars from './components/Vehicles/ViewAllCars.jsx'
+// import ViewAllBikes from './components/Vehicles/ViewAllBikes.jsx'
 
 const router= createBrowserRouter([
   {
@@ -49,12 +50,12 @@ const router= createBrowserRouter([
       },
       {
         path:"/car",
-        element:<Cards />
+        element:<ViewAllCars />
       },
-      {
-        path:"/bike",
-        element:<Bcards />
-      },
+      // {
+      //   path:"/bike",
+      //   element:<ViewAllBikes/>
+      // },
       {
         path:"/more",
         element:<More />

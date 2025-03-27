@@ -4,9 +4,11 @@ import { FiUpload } from "react-icons/fi";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import service from "../../appright/conf";
 import authService from "../../appright/auth";
+import { clear } from "i/lib/inflections";
 const VehicleRentalForm = () => {
   const [formData, setFormData] = useState({
-    image: null,
+    imageId: null,
+    image:null,
     imagePreview: null,
     vehicleName: "",
     vehicleType: "",
@@ -68,24 +70,7 @@ const VehicleRentalForm = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if(image){
-        const img = service.uploadFile(im);
-      }
-      const res= await service.createDcoument({})
-      if(res){
-        console.log(res);
-
-      }
-      
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  
   const renderStarRating = () => {
     return (
       <div className="flex items-center space-x-1">
@@ -113,11 +98,65 @@ const VehicleRentalForm = () => {
       </div>
     );
   };
-
+  
+  const uploadImg = async(image) =>{
+    try {
+      const res = await service.uploadFile(image);
+      if(res){
+        console.log(res);
+        return res.$id;
+      }
+     } catch (error) {
+      console.log(error);
+      
+    }
+  }
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        console.log(e.target);
+        const file = formData.image;
+        const imgId = await uploadImg(file);
+        setFormData({ ...formData, imageId:imgId });
+        console.log(imgId);
+        
+        if(imgId){
+          const res= await service.uploadData(
+            formData.imageId,
+            formData.vehicleName,
+            formData.vehicleType,
+            formData.fuelType,
+            formData.range,
+          formData.mileage,
+          formData.seats,
+          formData.luggageCapacity,
+          formData.rentPrice,
+          formData.airConditioning,
+          formData.gpsNavigation,
+          formData.bluetooth,
+          formData.sunroof,
+          formData.transmissionType,
+          formData.numberOfDoors,
+          formData.conditions,
+          formData.rating,
+        )
+          if(res){
+            console.log(res);
+            alert("Data added")
+            clear
+          }
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <form  className="space-y-8 divide-y divide-gray-200">
+        <form  className="space-y-8 divide-y divide-gray-200" onSubmit={(e)=>handleSubmit(e)}>
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Vehicle Information and Rental Card</h2>
@@ -283,7 +322,18 @@ const VehicleRentalForm = () => {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
+                  <label className="block text-sm font-medium text-gray-700">Range</label>
+                  <input
+                    type="number"
+                    name="range"
+                    value={formData.range}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
                 <label className="block text-sm font-medium text-gray-700">Rent Price (per day)</label>
                 <input
                   type="number"
@@ -293,6 +343,7 @@ const VehicleRentalForm = () => {
                   min="0"
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
+                </div>
               </div>
 
               <div className="space-y-4">

@@ -29,22 +29,6 @@ const HomePage = () => {
     },
   ];
 
-  const vehicles = [
-    {
-      type: "Cars",
-      image: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2",
-      description: "Luxury and comfort for your journey",
-      // price: " From Rs.1000/day",
-      icon: <FaCar className="text-4xl" />
-    },
-    {
-      type: "Bikes",
-      image: "https://images.unsplash.com/photo-1558981806-ec527fa84c39",
-      description: "Freedom on two wheels",
-      // price: "$30/day",
-      icon: <FaMotorcycle className="text-4xl" />
-    }
-  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -78,28 +62,46 @@ const HomePage = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16">Our Fleet</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            {vehicles.map((vehicle, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
+            {/* {Cars} */}
+              <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                 <img
-                  src={vehicle.image}
-                  alt={vehicle.type}
+                  src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2"
                   className="w-full h-64 object-cover"
                 />
                 <div className="p-6">
                   <div className="flex items-center mb-4">
-                    {vehicle.icon}
-                    <h3 className="text-2xl font-bold ml-4">{vehicle.type}</h3>
+                  <FaCar className="text-4xl" />
+                    <h3 className="text-2xl font-bold ml-4">Cars</h3>
                   </div>
-                  <p className="text-gray-600 mb-4">{vehicle.description}</p>
+                  <p className="text-gray-600 mb-4">Luxury and comfort for your journey</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-blue-600 font-bold text-xl">{vehicle.price}</span>
+                    <span className="text-blue-600 font-bold text-xl"/>
                     <Link to={"/car"}><button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">
                       Explore
                     </button></Link>
                   </div>
                 </div>
               </div>
-            ))}
+              {/* {Bikes} */}
+              <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
+                <img
+                  src="https://images.unsplash.com/photo-1558981806-ec527fa84c39"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                  <FaMotorcycle className="text-4xl" />
+                    <h3 className="text-2xl font-bold ml-4">Bikes</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">Freedom on two wheels</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-blue-600 font-bold text-xl"/>
+                    <Link to={"/bike"}><button className="bg-blue-600 text-white px-6 py-2 rounded-full  hover:bg-blue-700 transition-colors">
+                      Explore
+                    </button></Link>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </section>

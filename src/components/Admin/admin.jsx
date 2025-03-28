@@ -1,264 +1,316 @@
-import { useState, useEffect } from "react";
-import { BsThreeDotsVertical, BsPerson, BsCarFront, BsCalendarCheck, BsBarChart, BsSun, BsMoon } from "react-icons/bs";
-import { Line, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
-import{Link} from "react-router-dom";
-const mockData = {
-  users: [
-    { id: 1, name: "John Doe", email: "john@example.com", phone: "+1234567890", registrationDate: "2024-01-15" },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "+1987654321", registrationDate: "2024-01-16" }
+import React, { useState, useEffect,useParams } from "react";
+import { FiUsers, FiTruck, FiBookOpen, FiDollarSign, FiMenu } from "react-icons/fi";
+import { MdDirectionsBike, MdDirectionsCar } from "react-icons/md";
+import { format } from "date-fns";
+import { Link } from "react-router-dom";
+const [car, setCar] = useState();
+const [isFecthing, setIsFetching] = useState(true);
+const { id } = useParams();
+
+const mockUsers = [
+  { id: 1, name: "John Doe", email: "john@example.com", registrationDate: "2024-01-15", status: "Active" },
+  { id: 2, name: "Jane Smith", email: "jane@example.com", registrationDate: "2024-01-16", status: "Active" },
+];
+
+const mockVehicles = {
+  bikes: [
+    { id: "B1", model: "Mountain Bike Pro", year: 2023, status: "Available" },
+    { id: "B2", model: "City Cruiser", year: 2024, status: "Booked" },
   ],
-  vehicles: [
-    { id: 1, model: "Tesla Model 3", year: 2024, category: "Electric", dailyRate: 150, status: "Available", image: "https://images.unsplash.com/photo-1684162440652-20574f2a5b82" },
-    { id: 2, model: "BMW X5", year: 2023, category: "SUV", dailyRate: 200, status: "Rented", image: "https://images.unsplash.com/photo-1683926131296-01430bb9dd3d" }
-  ],
-  bookings: [
-    { id: 1, userId: 1, vehicleId: 1, startDate: "2024-01-20", endDate: "2024-01-25", totalCost: 750, status: "Confirmed" },
-    { id: 2, userId: 2, vehicleId: 2, startDate: "2024-01-22", endDate: "2024-01-24", totalCost: 400, status: "Pending" }
+  cars: [
+    { id: "C1", model: "Tesla Model 3", year: 2023, status: "Available" },
+    { id: "C2", model: "Toyota Camry", year: 2024, status: "Maintenance" },
   ]
 };
 
-const chartData = [
-  { name: "Jan", revenue: 4000 },
-  { name: "Feb", revenue: 3000 },
-  { name: "Mar", revenue: 5000 },
-  { name: "Apr", revenue: 4500 },
-  { name: "May", revenue: 6000 }
+const mockBookings = [
+  {
+    id: "BK1",
+    user: "John Doe",
+    vehicle: "Mountain Bike Pro",
+    startDate: "2024-01-20",
+    endDate: "2024-01-22",
+    totalCost: 150,
+    status: "Active"
+  }
 ];
 
 const AdminPanel = () => {
-  const [darkMode, setDarkMode] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const toggleDarkMode = () => setDarkMode(!darkMode);
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const DashboardCards = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="p-6 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg shadow-md">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">Total Users</p>
+            <h3 className="text-2xl font-bold text-blue-600">{mockUsers.length}</h3>
+          </div>
+          <FiUsers className="text-3xl text-blue-500" />
+        </div>
+      </div>
+
+      <div className="p-6 bg-gradient-to-r from-green-50 to-green-100 rounded-lg shadow-md">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">Vehicles</p>
+            <div className="flex gap-4">
+              <span className="flex items-center">
+                <MdDirectionsBike className="mr-1" />
+                {mockVehicles.bikes.length}
+              </span>
+              <span className="flex items-center">
+                <MdDirectionsCar className="mr-1" />
+                {mockVehicles.cars.length}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="p-6 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg shadow-md">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">Active Bookings</p>
+            <h3 className="text-2xl font-bold text-purple-600">{mockBookings.length}</h3>
+          </div>
+          <FiBookOpen className="text-3xl text-purple-500" />
+        </div>
+      </div>
+
+      <div className="p-6 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg shadow-md">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">Total Revenue</p>
+            <h3 className="text-2xl font-bold text-yellow-600">
+              ${mockBookings.reduce((acc, booking) => acc + booking.totalCost, 0)}
+            </h3>
+          </div>
+          <FiDollarSign className="text-3xl text-yellow-500" />
+        </div>
+      </div>
+    </div>
+  );
+
+  const UsersTable = () => (
+    <div className="mt-4">
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search users by name, email, or ID"
+          className="w-full p-2 border rounded-lg"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white rounded-lg overflow-hidden">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">ID</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Name</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Email</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Registration Date</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {mockUsers.map((user) => (
+              <tr key={user.id} className="hover:bg-gray-50">
+                <td className="px-6 py-4 text-sm text-gray-900">{user.id}</td>
+                <td className="px-6 py-4 text-sm text-gray-900">{user.name}</td>
+                <td className="px-6 py-4 text-sm text-gray-900">{user.email}</td>
+                <td className="px-6 py-4 text-sm text-gray-900">
+                  {format(new Date(user.registrationDate), "MMM dd, yyyy")}
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                    {user.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  const VehiclesSection = () => (
+    <div className="space-y-8">
+      <div>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">Bikes</h3>
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Add New Bike
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white rounded-lg overflow-hidden">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">ID</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Model</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Year</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {mockVehicles.bikes.map((bike) => (
+                <tr key={bike.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm text-gray-900">{bike.id}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{bike.model}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{bike.year}</td>
+                  <td className="px-6 py-4 text-sm">
+                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                      {bike.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">Cars</h3>
+          <Link to={'/add'}>
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Add New Car
+          </button>
+          </Link>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white rounded-lg overflow-hidden">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">ID</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Model</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Year</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {mockVehicles.cars.map((car) => (
+                <tr key={car.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm text-gray-900">{car.id}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{car.model}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{car.year}</td>
+                  <td className="px-6 py-4 text-sm">
+                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                      {car.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+
+  const BookingsTable = () => (
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white rounded-lg overflow-hidden">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">ID</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">User</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Vehicle</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Start Date</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">End Date</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Total Cost</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200">
+          {mockBookings.map((booking) => (
+            <tr key={booking.id} className="hover:bg-gray-50">
+              <td className="px-6 py-4 text-sm text-gray-900">{booking.id}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">{booking.user}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">{booking.vehicle}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">
+                {format(new Date(booking.startDate), "MMM dd, yyyy")}
+              </td>
+              <td className="px-6 py-4 text-sm text-gray-900">
+                {format(new Date(booking.endDate), "MMM dd, yyyy")}
+              </td>
+              <td className="px-6 py-4 text-sm text-gray-900">${booking.totalCost}</td>
+              <td className="px-6 py-4 text-sm">
+                <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                  {booking.status}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 
   return (
-    <div className={`min-h-screen ${darkMode ? "dark bg-gray-900 text-white" : "bg-gray-100"}`}>
+    <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className={`fixed top-0 left-0 h-full w-64 bg-indigo-600 text-white transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <div className="p-4">
-          <h1 className="text-2xl font-bold mb-8">Vehicle Rental Admin</h1>
-          <nav className="space-y-2">
-            <button
-              onClick={() => setActiveSection("dashboard")}
-              className={`w-full flex items-center p-3 rounded-lg ${activeSection === "dashboard" ? "bg-indigo-700" : "hover:bg-indigo-700"}`}
-            >
-              <BsBarChart className="mr-3" /> Dashboard
-            </button>
-            <button
-              onClick={() => setActiveSection("users")}
-              className={`w-full flex items-center p-3 rounded-lg ${activeSection === "users" ? "bg-indigo-700" : "hover:bg-indigo-700"}`}
-            >
-              <BsPerson className="mr-3" /> Users
-            </button>
-            <button
-              onClick={() => setActiveSection("vehicles")}
-              className={`w-full flex items-center p-3 rounded-lg ${activeSection === "vehicles" ? "bg-indigo-700" : "hover:bg-indigo-700"}`}
-            >
-              <BsCarFront className="mr-3" /> Vehicles
-            </button>
-            <button
-              onClick={() => setActiveSection("bookings")}
-              className={`w-full flex items-center p-3 rounded-lg ${activeSection === "bookings" ? "bg-indigo-700" : "hover:bg-indigo-700"}`}
-            >
-              <BsCalendarCheck className="mr-3" /> Bookings
-            </button>
-          </nav>
+      <div
+        className={`${isSidebarOpen ? "w-64" : "w-20"} bg-white shadow-lg transition-all duration-300`}
+      >
+        <div className="p-4 flex items-center justify-between">
+          <h2 className={`font-bold text-xl ${!isSidebarOpen && "hidden"}`}>Admin Panel</h2>
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="p-2 rounded-lg hover:bg-gray-100"
+          >
+            <FiMenu className="text-gray-600" />
+          </button>
         </div>
-      </aside>
+        <nav className="mt-8">
+          <button
+            onClick={() => setActiveSection("dashboard")}
+            className={`w-full p-4 flex items-center ${activeSection === "dashboard" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
+          >
+            <FiUsers className="text-xl" />
+            {isSidebarOpen && <span className="ml-4">Dashboard</span>}
+          </button>
+          <button
+            onClick={() => setActiveSection("users")}
+            className={`w-full p-4 flex items-center ${activeSection === "users" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
+          >
+            <FiUsers className="text-xl" />
+            {isSidebarOpen && <span className="ml-4">Users</span>}
+          </button>
+          <button
+            onClick={() => setActiveSection("vehicles")}
+            className={`w-full p-4 flex items-center ${activeSection === "vehicles" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
+          >
+            <FiTruck className="text-xl" />
+            {isSidebarOpen && <span className="ml-4">Vehicles</span>}
+          </button>
+          <button
+            onClick={() => setActiveSection("bookings")}
+            className={`w-full p-4 flex items-center ${activeSection === "bookings" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
+          >
+            <FiBookOpen className="text-xl" />
+            {isSidebarOpen && <span className="ml-4">Bookings</span>}
+          </button>
+        </nav>
+      </div>
 
       {/* Main Content */}
-      <main className={`transition-all duration-300 ${sidebarOpen ? "ml-64" : "ml-0"}`}>
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-md p-4">
-          <div className="flex justify-between items-center">
-            <button onClick={toggleSidebar} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-              <BsThreeDotsVertical />
-            </button>
-            <button onClick={toggleDarkMode} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-              {darkMode ? <BsSun /> : <BsMoon />}
-            </button>
-          </div>
-        </header>
+      <div className="flex-1 overflow-auto p-8">
+        <h1 className="text-2xl font-bold mb-8">
+          {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+        </h1>
 
-        {/* Content Sections */}
-        <div className="p-6">
-          {activeSection === "dashboard" && (
-            <div className="space-y-6">
-              {/* Overview Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                  <h3 className="text-lg font-semibold mb-2">Total Users</h3>
-                  <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{mockData.users.length}</p>
-                </div>
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                  <h3 className="text-lg font-semibold mb-2">Total Vehicles</h3>
-                  <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{mockData.vehicles.length}</p>
-                </div>
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                  <h3 className="text-lg font-semibold mb-2">Active Bookings</h3>
-                  <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-                    {mockData.bookings.filter(b => b.status === "Confirmed").length}
-                  </p>
-                </div>
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                  <h3 className="text-lg font-semibold mb-2">Total Revenue</h3>
-                  <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-                    ${mockData.bookings.reduce((acc, curr) => acc + curr.totalCost, 0)}
-                  </p>
-                </div>
-              </div>
-
-              {/* Charts */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-4">Revenue Trend</h3>
-                <div className="h-64">
-                  <Line
-                    data={chartData}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line type="monotone" dataKey="revenue" stroke="#4f46e5" />
-                  </Line>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeSection === "users" && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-              <div className="p-6">
-                <h2 className="text-2xl font-semibold mb-4">Users Management</h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Phone</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Registration Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
-                      {mockData.users.map(user => (
-                        <tr key={user.id}>
-                          <td className="px-6 py-4">{user.id}</td>
-                          <td className="px-6 py-4">{user.name}</td>
-                          <td className="px-6 py-4">{user.email}</td>
-                          <td className="px-6 py-4">{user.phone}</td>
-                          <td className="px-6 py-4">{user.registrationDate}</td>
-                          <td className="px-6 py-4">
-                            <button className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">View</button>
-                            <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Suspend</button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeSection === "vehicles" && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-semibold">Vehicles Management</h2>
-                  <Link to={'/add'}><button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Add New Vehicle</button></Link>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {mockData.vehicles.map(vehicle => (
-                    <div key={vehicle.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden">
-                      <img src={vehicle.image} alt={vehicle.model} className="w-full h-48 object-cover" />
-                      <div className="p-4">
-                        <h3 className="text-xl font-semibold mb-2">{vehicle.model}</h3>
-                        <p className="text-gray-600 dark:text-gray-300 mb-2">Year: {vehicle.year}</p>
-                        <p className="text-gray-600 dark:text-gray-300 mb-2">Category: {vehicle.category}</p>
-                        <p className="text-gray-600 dark:text-gray-300 mb-2">Daily Rate: ${vehicle.dailyRate}</p>
-                        <p className={`mb-4 ${vehicle.status === "Available" ? "text-green-600" : "text-red-600"}`}>
-                          {vehicle.status}
-                        </p>
-                        <div className="flex justify-end space-x-2">
-                          <button className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</button>
-                          <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Remove</button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeSection === "bookings" && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-              <div className="p-6">
-                <h2 className="text-2xl font-semibold mb-6">Bookings Management</h2>
-                <div className="mb-6 flex gap-4">
-                  <input
-                    type="date"
-                    className="border rounded-lg px-4 py-2 dark:bg-gray-700 dark:border-gray-600"
-                    placeholder="Start Date"
-                  />
-                  <input
-                    type="date"
-                    className="border rounded-lg px-4 py-2 dark:bg-gray-700 dark:border-gray-600"
-                    placeholder="End Date"
-                  />
-                  <select className="border rounded-lg px-4 py-2 dark:bg-gray-700 dark:border-gray-600">
-                    <option value="">All Statuses</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                  </select>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Booking ID</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">User</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Vehicle</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Dates</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Cost</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
-                      {mockData.bookings.map(booking => (
-                        <tr key={booking.id}>
-                          <td className="px-6 py-4">{booking.id}</td>
-                          <td className="px-6 py-4">{mockData.users.find(u => u.id === booking.userId)?.name}</td>
-                          <td className="px-6 py-4">{mockData.vehicles.find(v => v.id === booking.vehicleId)?.model}</td>
-                          <td className="px-6 py-4">{booking.startDate} - {booking.endDate}</td>
-                          <td className="px-6 py-4">${booking.totalCost}</td>
-                          <td className="px-6 py-4">
-                            <span className={`px-2 py-1 rounded-full text-xs ${booking.status === "Confirmed" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
-                              {booking.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4">
-                            <button className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">Edit</button>
-                            <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Cancel</button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </main>
+        {activeSection === "dashboard" && <DashboardCards />}
+        {activeSection === "users" && <UsersTable />}
+        {activeSection === "vehicles" && <VehiclesSection />}
+        {activeSection === "bookings" && <BookingsTable />}
+      </div>
     </div>
   );
 };

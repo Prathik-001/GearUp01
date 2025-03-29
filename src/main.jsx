@@ -11,8 +11,6 @@ import Body from './components/Body/body.jsx';
 import Navbar from './components/Navbar/nav.jsx';
 import Login from './components/Login/login.jsx';
 import Shedule from './components/Shedule/shedule.jsx';
-import Cards from './components/Cards/card.jsx';
-import Bcards from './components/Cards/bcard.jsx';
 import More from './components/Cards/more.jsx';
 import Not_found from './components/Not_found/notfound.jsx';
 import Singup from './components/Singnup/singnup.jsx'
@@ -21,8 +19,11 @@ import Add from './components/Admin/add.jsx';
 import Userdash from './components/Userdash/userdash.jsx';
 import About from './components/About/about.jsx';
 import ViewAllCars from './components/Vehicles/ViewAllCars.jsx'
-// import ViewAllBikes from './components/Vehicles/ViewAllBikes.jsx'
+import ViewAllBikes from './components/Vehicles/ViewAllBike.jsx';
 import CarInfo from "./components/Cards/more.jsx"
+import BikeInfo from "./components/Cards/bmore.jsx"
+import Badd from './components/Admin/Badd.jsx';
+import Bmore from './components/Cards/bmore.jsx'
 const router= createBrowserRouter([
   {
     path:"/",
@@ -53,16 +54,24 @@ const router= createBrowserRouter([
         element:<ViewAllCars />
       },
       {
+        path:"/bike",
+        element:<ViewAllBikes />
+      },
+      {
         path:"/car-info/:id",
         element:<CarInfo />
       },
-      // {
-      //   path:"/bike",
-      //   element:<ViewAllBikes/>
-      // },
+      {
+        path:"/bike-info/:id",
+        element:<BikeInfo />
+      },
+      {
+        path:"/badd",
+        element:<Badd/>
+      },
       {
         path:"/more",
-        element:<More />
+        element:<Bmore />
       },
       {
         path:"*",
@@ -87,6 +96,10 @@ const router= createBrowserRouter([
       {
         path:"/about",
         element:<About />
+      },
+      {
+        path:"/bmore",
+        element:<Bmore />
       },
     ],
   },

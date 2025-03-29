@@ -154,6 +154,8 @@ const AdminPanel = () => {
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
               </tr>
             </thead>
+            {/*  */}
+            <div>
             <tbody className="divide-y divide-gray-200">
               {mockVehicles.bikes.map((bike) => (
                 <tr key={bike.id} className="hover:bg-gray-200">
@@ -168,6 +170,8 @@ const AdminPanel = () => {
                 </tr>
               ))}
             </tbody>
+            </div>
+          {/*  */}
           </table>
         </div>
       </div>
@@ -317,7 +321,7 @@ const AdminPanel = () => {
         {activeSection === "dashboard" && <DashboardCards />}
         {activeSection === "users" && <UsersTable />}
         {activeSection === "car" && <CarSection />}
-        {activeSection === "bike" && <bikeSection />}
+        {activeSection === "bike" && <BikeSection />}
         {activeSection === "bookings" && <BookingsTable />}
       </div>
     </div>

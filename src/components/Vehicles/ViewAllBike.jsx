@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaSearch, FaTimes, FaGasPump, FaBolt, FaLeaf } from "react-icons/fa";
-import VehicleCard from "./CarCard";
+import VehicleCard from "./BikeCard";
 import service from "../../appright/conf";
 
 const ViewAllCar = () => {
@@ -27,7 +27,7 @@ const ViewAllCar = () => {
   ];
 
   useEffect(() => {
-    service.getVehiclesData()
+    service.getBikesData()
       .then((data) => setVehicles(data.documents))
       .catch((err) => console.log(err));
   }, []);

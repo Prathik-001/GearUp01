@@ -1,8 +1,9 @@
 import { useState ,useEffect} from "react";
-import { FaCar, FaGasPump, FaCogs, FaUsers, FaSuitcase, FaSnowflake, FaMapMarkedAlt, FaFilm, FaDoorOpen, FaTachometerAlt,FaSun } from "react-icons/fa";
+import { FaBox, FaDrumSteelpan, FaCar, FaGasPump, FaCogs, FaUsers, FaSuitcase, FaSnowflake, FaMapMarkedAlt, FaFilm, FaDoorOpen, FaTachometerAlt,FaSun } from "react-icons/fa";
 import service from "../../appright/conf";
 import { useNavigate, useParams } from "react-router-dom";
-const CarInfo = () => {
+
+const BikeInfo = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [car, setCar] = useState();
   const [isFecthing, setIsFetching] = useState(true);
@@ -43,7 +44,7 @@ const Feature = ({ icon, label, available, value }) => (
   useEffect(() => {
     if (id) {
       if(isFecthing){
-        service.getCarInfo(id)
+        service.getBikeInfo(id)
         .then((res) => {
           if (res) {
             setCar(res);
@@ -82,8 +83,8 @@ const Feature = ({ icon, label, available, value }) => (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <InfoItem icon={<FaGasPump />} label="Fuel" value={car.fuelType} />
             <InfoItem icon={<FaTachometerAlt />} label="Mileage" value={car.mileage} />
-            <InfoItem icon={<FaUsers />} label="Seats" value={car.seats} />
-            <InfoItem icon={<FaSuitcase />} label="Luggage" value={car.luggageCapacity} />
+            <InfoItem icon={<FaUsers />} label="Seats" value="2" />
+            <InfoItem icon={<FaSuitcase />} label="CC" value={car.cc} />
           </div>
 
           {/* Rental Price Section */}
@@ -108,13 +109,9 @@ const Feature = ({ icon, label, available, value }) => (
           {/* Expandable Features Section */}
           <div className={`transition-all duration-300 ${isExpanded ? "max-h-96" : "max-h-0 overflow-hidden"}`}>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-4">
-              <Feature icon={<FaSnowflake />} label="Air Conditioning" available={car.airConditioning} />
+              <Feature icon={<FaDrumSteelpan />} label="ABS" available={car.abs} />
               <Feature icon={<FaMapMarkedAlt />} label="GPS Navigation" available={car.gpsNavigation} />
-              <Feature icon={<FaFilm />} label="Entertainment" available={car.bluetooth} />
-              <Feature icon={<FaDoorOpen />} label="Doors" value={car.numberOfDoors} />
-              <Feature icon={<FaCogs />} label="Transmission" value={car.transmissionType} />
-              <Feature icon={<FaSun />} label="Sunroof" available={car.sunroof} />
-
+              <Feature icon={<FaBox />} label="Top Box" available={car.topBox} />
             </div>
 
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
@@ -137,4 +134,4 @@ const Feature = ({ icon, label, available, value }) => (
 };
 
 
-export default CarInfo;
+export default BikeInfo;

@@ -59,18 +59,69 @@ export class Service {
         }
       );
     } catch (error) {
-      console.log("Appwrite service :: createPost :: error " + error);
+      console.log("Appwrite service :: createPost ::car error " + error);
     }
   }
 
   //Bike database
-  
+  async uploadBikeData(
+    imageId,
+    vehicleName,
+    vehicleType,
+    fuelType,
+    range,
+    mileage, 
+    cc,
+    rentPrice,
+    abs,
+    gpsNavigation,
+    topBox,
+    conditions,
+    rating,
+  ) {
+    try {
+      return await this.database.createDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteBikeCollectionId,
+        ID.unique(),
+        {
+          vehicleName:vehicleName,
+          vehicleType:vehicleType,
+          fuelType:fuelType,
+          range:range,
+          mileage:mileage,
+          cc:cc,
+          rentPrice:rentPrice,
+          abs:abs,
+          gpsNavigation:gpsNavigation,
+          topBox:topBox,
+          conditions:conditions,
+          rating:rating,
+          imageId:imageId, 
+        }
+      );
+    } catch (error) {
+      console.log("Appwrite service :: createPost ::  bike error " + error);
+    }
+  }
 
   async getVehiclesData() {
     try {
       return await this.database.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId
+      );
+    } catch (error) {
+      console.log("Appwrite service :: getData :: error " + error);
+      return false;
+    }
+  }
+
+  async getBikesData() {
+    try {
+      return await this.database.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteBikeCollectionId
       );
     } catch (error) {
       console.log("Appwrite service :: getData :: error " + error);
@@ -108,6 +159,19 @@ export class Service {
       return await this.database.getDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
+        id
+      );
+    } catch (error) {
+      console.log("Appwrite service :: getData :: error " + error);
+      return false;
+    }
+  }
+
+  async getBikeInfo(id) {
+    try {
+      return await this.database.getDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteBikeCollectionId,
         id
       );
     } catch (error) {

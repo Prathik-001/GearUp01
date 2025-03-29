@@ -55,17 +55,17 @@ const VehicleCard = ({ vehicle }) => {
 
   const getTypeColor = (type) => {
     switch (type) {
-      case "SEDAN":
+      case "ELECTRIC":
         return "bg-blue-100 text-blue-800";
-      case "SUV":
+      case "CRUISER":
         return "bg-green-100 text-green-800";
-      case "MPV":
+      case "CAFE-RACER":
         return "bg-yellow-100 text-yellow-800";
-      case "HATCHBACK":
+      case "OFF-ROAD":
         return "bg-orange-100 text-orange-800";
-      case "COUPE":
+      case "STANDARD":
         return "bg-slate-100 text-slate-800";
-      case "CONVERTIBLES":
+      case "SCOOTER":
         return "bg-purple-100 text-purple-800";
       case "SPORT":
         return "bg-red-100 text-red-800";
@@ -106,7 +106,7 @@ const VehicleCard = ({ vehicle }) => {
             {getLuxuryStars(vehicle.rating)}
           </div>
 
-          <Link to={`/car-info/${vehicle.$id}`}>
+          <Link to={`/bike-info/${vehicle.$id}`}>
             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
               View More
             </button>

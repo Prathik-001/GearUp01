@@ -13,6 +13,7 @@ export class Service {
     this.database = new Databases(this.client);
     this.bucket = new Storage(this.client);
   }
+  // Car database
   async uploadData(
     imageId,
     vehicleName,
@@ -61,6 +62,9 @@ export class Service {
       console.log("Appwrite service :: createPost :: error " + error);
     }
   }
+
+  //Bike database
+  
 
   async getVehiclesData() {
     try {

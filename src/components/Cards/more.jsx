@@ -7,8 +7,8 @@ const CarInfo = () => {
   const [car, setCar] = useState();
   const [isFecthing, setIsFetching] = useState(true);
   const { id } = useParams();
-  const [fileId, setFileId] = useState("");
-  const navigate = useNavigate();
+    const [fileId, setFileId] = useState("");
+    const navigate = useNavigate();
   
   const vehicleData = {
     name: "Tesla Model S Plaid",

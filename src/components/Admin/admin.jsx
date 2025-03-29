@@ -1,11 +1,8 @@
-import React, { useState, useEffect,useParams } from "react";
+import React, { useState, useEffect } from "react";
 import { FiUsers, FiTruck, FiBookOpen, FiDollarSign, FiMenu } from "react-icons/fi";
 import { MdDirectionsBike, MdDirectionsCar } from "react-icons/md";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
-const [car, setCar] = useState();
-const [isFecthing, setIsFetching] = useState(true);
-const { id } = useParams();
 
 const mockUsers = [
   { id: 1, name: "John Doe", email: "john@example.com", registrationDate: "2024-01-15", status: "Active" },
@@ -138,8 +135,8 @@ const AdminPanel = () => {
     </div>
   );
 
-  const VehiclesSection = () => (
-    <div className="space-y-8">
+  const BikeSection = () => (
+    <div className="space-y-8 bg-black">
       <div>
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">Bikes</h3>
@@ -159,7 +156,7 @@ const AdminPanel = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {mockVehicles.bikes.map((bike) => (
-                <tr key={bike.id} className="hover:bg-gray-50">
+                <tr key={bike.id} className="hover:bg-gray-200">
                   <td className="px-6 py-4 text-sm text-gray-900">{bike.id}</td>
                   <td className="px-6 py-4 text-sm text-gray-900">{bike.model}</td>
                   <td className="px-6 py-4 text-sm text-gray-900">{bike.year}</td>
@@ -174,7 +171,11 @@ const AdminPanel = () => {
           </table>
         </div>
       </div>
+      </div>
+  );
 
+  const CarSection = () => (
+    <div className="space-y-8 bg-black">
       <div>
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">Cars</h3>
@@ -284,11 +285,18 @@ const AdminPanel = () => {
             {isSidebarOpen && <span className="ml-4">Users</span>}
           </button>
           <button
-            onClick={() => setActiveSection("vehicles")}
-            className={`w-full p-4 flex items-center ${activeSection === "vehicles" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
+            onClick={() => setActiveSection("car")}
+            className={`w-full p-4 flex items-center ${activeSection === "car" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
           >
             <FiTruck className="text-xl" />
-            {isSidebarOpen && <span className="ml-4">Vehicles</span>}
+            {isSidebarOpen && <span className="ml-4">Cars</span>}
+          </button>
+          <button
+            onClick={() => setActiveSection("bike")}
+            className={`w-full p-4 flex items-center ${activeSection === "bike" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
+          >
+            <FiTruck className="text-xl" />
+            {isSidebarOpen && <span className="ml-4">Bikes</span>}
           </button>
           <button
             onClick={() => setActiveSection("bookings")}
@@ -308,7 +316,8 @@ const AdminPanel = () => {
 
         {activeSection === "dashboard" && <DashboardCards />}
         {activeSection === "users" && <UsersTable />}
-        {activeSection === "vehicles" && <VehiclesSection />}
+        {activeSection === "car" && <CarSection />}
+        {activeSection === "bike" && <bikeSection />}
         {activeSection === "bookings" && <BookingsTable />}
       </div>
     </div>

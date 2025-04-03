@@ -6,8 +6,13 @@ import service from "../../appright/conf.js";
 
 const VehicleCard = ({ vehicle }) => {
   const [fileId, setFileId] = useState(vehicle?.imageId);
+ const [url,seturl]=useState(service.getFilePreiview(fileId))
 
+ useEffect(()=>{
+  seturl(url.replace("preview","view")+"&mode=admin")
+ },[])
   const getFuelTypeIcon = (fuelType) => {
+    
     switch (fuelType) {
       case "Electric":
         return (
@@ -79,7 +84,7 @@ const VehicleCard = ({ vehicle }) => {
       <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
         <div className="h-48 overflow-hidden">
           <img
-            src={service.getFilePreiview(fileId)}
+            src={ url /*service.getFilePreiview(fileId) */}
             className="w-full h-full object-cover"
           />
         </div>

@@ -24,6 +24,7 @@ import CarInfo from "./components/Cards/more.jsx"
 import BikeInfo from "./components/Cards/bmore.jsx"
 import Badd from './components/Admin/Badd.jsx';
 import Bmore from './components/Cards/bmore.jsx'
+import CardList from './components/Admin/CardList.jsx';
 const router= createBrowserRouter([
   {
     path:"/",
@@ -100,6 +101,10 @@ const router= createBrowserRouter([
       {
         path:"/bmore",
         element:<Bmore />
+      },
+      {
+        path:"/clist",
+        element:<CardList />
       },
     ],
   },

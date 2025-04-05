@@ -3,8 +3,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import service from "../../appright/conf";
-import authService from "../../appright/auth";
-import { clear } from "i/lib/inflections";
+
 const VehicleRentalForm = () => {
   const [formData, setFormData] = useState({
     imageId: null,
@@ -29,6 +28,7 @@ const VehicleRentalForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -112,18 +112,17 @@ const VehicleRentalForm = () => {
     }
   }
   
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        console.log(e.target);
-        const file = formData.image;
-        const imgId = await uploadImg(file);
-        setFormData({ ...formData, imageId:imgId });
-        console.log(imgId);
-        
-        if(imgId){
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    setLoading(true);
+    try {
+      const file = formData.image;
+      const imgId = await uploadImg(file);
+
+      if (imgId) {
           const res= await service.uploadData(
-            formData.imageId,
+            imgId,
             formData.vehicleName,
             formData.vehicleType,
             formData.fuelType,
@@ -144,12 +143,35 @@ const VehicleRentalForm = () => {
           if(res){
             console.log(res);
             alert("Data added")
-            clear
+            setFormData({
+              imageId: null,
+              image:null,
+              imagePreview: null,
+              vehicleName: "",
+              vehicleType: "",
+              fuelType: "",
+              range: "",
+              mileage: "",
+              seats: "",
+              luggageCapacity: "",
+              rentPrice: "",
+              airConditioning: false,
+              gpsNavigation: false,
+              bluetooth: false,
+              sunroof: false,
+              transmissionType: "",
+              numberOfDoors: "",
+              conditions: "",
+              rating: "",
+            })
           }
         }
-        
+ 
       } catch (error) {
         console.log(error);
+      }
+      finally {
+        setLoading(false);
       }
     };
     
@@ -429,22 +451,17 @@ const VehicleRentalForm = () => {
             </div>
           </div>
 
-          <div className="pt-5">
-            <div className="flex justify-end">
-              <button
-                type="button"
-                className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Cancel
-              </button>
+          <div className="flex justify-end pt-6">
               <button
                 type="submit"
-                className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={loading}
+                className={`ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
+                  loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
+                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
               >
-                Save
+                {loading ? "Saving..." : "Save"}
               </button>
             </div>
-          </div>
         </form>
       </div>
     </div>

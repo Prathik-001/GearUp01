@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { FiUsers, FiTruck, FiBookOpen, FiDollarSign, FiMenu } from "react-icons/fi";
+import { FiUsers, FiTruck, FiBookOpen, FiDollarSign, FiMenu,} from "react-icons/fi";
+import { FaCar, FaMotorcycle,} from "react-icons/fa";
 import { MdDirectionsBike, MdDirectionsCar } from "react-icons/md";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import service from "../../appright/conf";
+import VehicleCardList from './CardList';
+
 
 const mockUsers = [
   { id: 1, name: "John Doe", email: "john@example.com", registrationDate: "2024-01-15", status: "Active" },
   { id: 2, name: "Jane Smith", email: "jane@example.com", registrationDate: "2024-01-16", status: "Active" },
 ];
 
-const mockVehicles = {
-  bikes: [
-    { id: "B1", model: "Mountain Bike Pro", year: 2023, status: "Available" },
-    { id: "B2", model: "City Cruiser", year: 2024, status: "Booked" },
-  ],
-  cars: [
-    { id: "C1", model: "Tesla Model 3", year: 2023, status: "Available" },
-    { id: "C2", model: "Toyota Camry", year: 2024, status: "Maintenance" },
-  ]
-};
 
 const mockBookings = [
   {
@@ -36,6 +30,8 @@ const AdminPanel = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [bike, setBikeVehicles] = useState([]);
+  const [car, setCarVehicles] = useState([]); 
 
   const DashboardCards = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -43,7 +39,7 @@ const AdminPanel = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-gray-500 text-sm">Total Users</p>
-            <h3 className="text-2xl font-bold text-blue-600">{mockUsers.length}</h3>
+            <h3 className="text-2xl font-bold text-blue-600">{}</h3>
           </div>
           <FiUsers className="text-3xl text-blue-500" />
         </div>
@@ -56,11 +52,11 @@ const AdminPanel = () => {
             <div className="flex gap-4">
               <span className="flex items-center">
                 <MdDirectionsBike className="mr-1" />
-                {mockVehicles.bikes.length}
+                {bike.length}
               </span>
               <span className="flex items-center">
                 <MdDirectionsCar className="mr-1" />
-                {mockVehicles.cars.length}
+                {car.length}
               </span>
             </div>
           </div>
@@ -135,87 +131,64 @@ const AdminPanel = () => {
     </div>
   );
 
+useEffect(() => {
+  service.getBikesData ()
+    .then((data) => setBikeVehicles(data.documents))
+    .catch((err) => console.log(err));
+  }, []);
+
   const BikeSection = () => (
-    <div className="space-y-8 bg-black">
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold">Bikes</h3>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+    <div className="grid">
+      <Link to={'/badd'}>
+          <button className=" text-xl font-semibold px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mb-4">
             Add New Bike
-          </button>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg overflow-hidden">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">ID</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Model</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Year</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
-              </tr>
-            </thead>
-            {/*  */}
-            <div>
-            <tbody className="divide-y divide-gray-200">
-              {mockVehicles.bikes.map((bike) => (
-                <tr key={bike.id} className="hover:bg-gray-200">
-                  <td className="px-6 py-4 text-sm text-gray-900">{bike.id}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{bike.model}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{bike.year}</td>
-                  <td className="px-6 py-4 text-sm">
-                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                      {bike.status}
-                    </span>
-                  </td>
-                </tr>
+          </button></Link>
+          <div className="space-y-8 bg-gray-200">
+             {bike.length === 0 ? (
+                  <div className="text-center py-12">
+                    <FaCar className="mx-auto text-6xl text-gray-300 mb-4" />
+                    <p className="text-gray-500 text-xl">No vehicles available</p>
+                  </div>
+                ) : (
+                  <div className="space-y-1 ">
+                    {bike.map((vehicle) => (
+                      <div key={Math.random()*20} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 hover:scale-100 ">
+                      <VehicleCardList vehicle={vehicle} />
+                </div>
               ))}
-            </tbody>
+              </div>
+            )}
             </div>
-          {/*  */}
-          </table>
-        </div>
-      </div>
       </div>
   );
+  useEffect(() => {
+    service.getVehiclesData ()
+      .then((data) => setCarVehicles(data.documents))
+      .catch((err) => console.log(err));
+    }, []);
 
   const CarSection = () => (
-    <div className="space-y-8 bg-black">
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold">Cars</h3>
-          <Link to={'/add'}>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            Add New Car
-          </button>
-          </Link>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg overflow-hidden">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">ID</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Model</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Year</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {mockVehicles.cars.map((car) => (
-                <tr key={car.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-900">{car.id}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{car.model}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{car.year}</td>
-                  <td className="px-6 py-4 text-sm">
-                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                      {car.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div className="grid">
+    <Link to={'/add'}>
+        <button className=" text-xl font-semibold px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mb-4">
+          Add New Car
+        </button></Link>
+        <div className="space-y-8 bg-gray-200">
+           {car.length === 0 ? (
+                <div className="text-center py-12">
+                  <FaCar className="mx-auto text-6xl text-gray-300 mb-4" />
+                  <p className="text-gray-500 text-xl">No vehicles available</p>
+                </div>
+              ) : (
+                <div className="space-y-1 ">
+                  {car.map((vehicle) => (
+                    <div key={Math.random()*20} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 hover:scale-100 ">
+                    <VehicleCardList vehicle={vehicle} />
+              </div>
+            ))}
+            </div>
+          )}
+          </div>
     </div>
   );
 
@@ -292,14 +265,14 @@ const AdminPanel = () => {
             onClick={() => setActiveSection("car")}
             className={`w-full p-4 flex items-center ${activeSection === "car" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
           >
-            <FiTruck className="text-xl" />
+            <FaCar className="text-xl" />
             {isSidebarOpen && <span className="ml-4">Cars</span>}
           </button>
           <button
             onClick={() => setActiveSection("bike")}
             className={`w-full p-4 flex items-center ${activeSection === "bike" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
           >
-            <FiTruck className="text-xl" />
+            <FaMotorcycle className="text-xl" /> 
             {isSidebarOpen && <span className="ml-4">Bikes</span>}
           </button>
           <button

@@ -130,7 +130,7 @@ const AdminPanel = () => {
       </div>
     </div>
   );
-
+// fetching the bike data
 useEffect(() => {
   service.getBikesData ()
     .then((data) => setBikeVehicles(data.documents))
@@ -153,7 +153,9 @@ useEffect(() => {
                   <div className="space-y-1 ">
                     {bike.map((vehicle) => (
                       <div key={Math.random()*20} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 hover:scale-100 ">
-                      <VehicleCardList vehicle={vehicle} />
+                      <VehicleCardList key={vehicle}
+                    vehicle={vehicle}
+                    onDelete={handleDeleteBike}/>
                 </div>
               ))}
               </div>
@@ -161,6 +163,8 @@ useEffect(() => {
             </div>
       </div>
   );
+
+// fetching the bike data
   useEffect(() => {
     service.getVehiclesData ()
       .then((data) => setCarVehicles(data.documents))
@@ -182,8 +186,12 @@ useEffect(() => {
               ) : (
                 <div className="space-y-1 ">
                   {car.map((vehicle) => (
-                    <div key={Math.random()*20} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 hover:scale-100 ">
-                    <VehicleCardList vehicle={vehicle} />
+                    <div key={Math.random()*20
+                    } className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 hover:scale-100 ">
+                    <VehicleCardList 
+                    key={vehicle}
+                    vehicle={vehicle}
+                    onDelete={handleDeleteCar}/>
               </div>
             ))}
             </div>
@@ -191,6 +199,34 @@ useEffect(() => {
           </div>
     </div>
   );
+
+  // Deleting the Car 
+  const handleDeleteCar = async (id) => {
+    if (window.confirm("Are you sure you want to delete this car?")) {
+      try {
+        await service.deleteCar(id);
+        alert("Car deleted!");
+        setCarVehicles((prev) => prev.filter((item) => item.$id !== id));
+      } catch (err) {
+        console.error(err);
+        alert("Error deleting car");
+      }
+    }
+  };
+
+// Deleting the Bike  
+  const handleDeleteBike = async (id) => {
+    if (window.confirm("Are you sure you want to delete this bike?")) {
+      try {
+        await service.deleteBike(id);
+        alert("Bike deleted!");
+        setBikeVehicles((prev) => prev.filter((item) => item.$id !== id));
+      } catch (err) {
+        console.error(err);
+        alert("Error deleting bike");
+      }
+    }
+  };
 
   const BookingsTable = () => (
     <div className="overflow-x-auto">

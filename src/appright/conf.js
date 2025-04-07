@@ -180,6 +180,34 @@ export class Service {
     }
   }
 
+  // Delete a car document
+async deleteCar(documentId) {
+  try {
+    return await this.database.deleteDocument(
+      conf.appwriteDatabaseId,
+      conf.appwriteCollectionId,
+      documentId
+    );
+  } catch (error) {
+    console.log("Appwrite service :: deleteCar :: error " + error);
+    throw error;
+  }
+}
+
+// Delete a bike document
+async deleteBike(documentId) {
+  try {
+    return await this.database.deleteDocument(
+      conf.appwriteDatabaseId,
+      conf.appwriteBikeCollectionId,
+      documentId
+    );
+  } catch (error) {
+    console.log("Appwrite service :: deleteBike :: error " + error);
+    throw error;
+  }
+}
+
   // async getCourseByTopic(topic) {
   //   try {
   //     return await this.database.listDocuments(

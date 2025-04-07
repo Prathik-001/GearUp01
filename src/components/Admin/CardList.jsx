@@ -10,12 +10,8 @@ const VehicleCardList = ({ vehicle, onDelete }) => {
     // you can trigger a modal/form here
   };
 
-  const handleDelete = () => {
-    setShowModal(true);
-  };
-
-  const confirmDelete = () => {
-    onDelete(vehicle.id);
+  const handleConfirmDelete = () => {
+    onDelete(vehicle.$id);
     setShowModal(false);
   };
 
@@ -63,7 +59,7 @@ const VehicleCardList = ({ vehicle, onDelete }) => {
             <FaEdit size={18} />
           </button>
           <button
-            onClick={handleDelete}
+            onClick={handleConfirmDelete}
             className="text-red-500 hover:text-red-700 transition-colors duration-200 p-2"
             aria-label="Delete vehicle"
           >
@@ -72,30 +68,6 @@ const VehicleCardList = ({ vehicle, onDelete }) => {
         </div>
       </div>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
-            <h3 className="text-lg font-bold mb-4">Confirm Deletion</h3>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this vehicle?
-            </p>
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-200"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

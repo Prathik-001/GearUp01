@@ -1,23 +1,25 @@
 import "./App.css";
 import { useEffect } from "react";
 import Navbar from "./components/Navbar/nav";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import authService from "./appright/auth";
-import service from "./appright/conf";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login, logout } from "./store/authSlice";
 
 function App() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const user = useSelector((state) => state.auth.userData);
-  const userId = useSelector((state) => state.auth.userId);
 
   useEffect(() => {
     authService.getCurrentUser().then((userData) => {
       if (userData) {
-        dispatch(login({ userData }));
+        const isAdmin =userData.prefs?.isAdmin === true || userData.prefs?.isAdmin === "true";
+        dispatch(
+          login({
+            userData,
+            userId: userData.$id,
+            isAdmin,
+          })
+        );
       } else {
         dispatch(logout());
       }

@@ -3,11 +3,14 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import service from "../../appright/conf";
+import { useSelector } from 'react-redux';
+
 
 const VehicleRentalForm = () => {
+  const userId = useSelector((state) => state.auth.userId); 
   const [formData, setFormData] = useState({
     imageId: null,
-    image:null,
+    image: null,
     imagePreview: null,
     vehicleName: "",
     vehicleType: "",
@@ -119,14 +122,13 @@ const VehicleRentalForm = () => {
     try {
       const file = formData.image;
       const imgId = await uploadImg(file);
-
       if (imgId) {
-          const res= await service.uploadData(
-            imgId,
-            formData.vehicleName,
-            formData.vehicleType,
-            formData.fuelType,
-            formData.range,
+        const res = await service.uploadData(
+          imgId,
+          formData.vehicleName,
+          formData.vehicleType,
+          formData.fuelType,
+          formData.range,
           formData.mileage,
           formData.seats,
           formData.luggageCapacity,
@@ -139,6 +141,7 @@ const VehicleRentalForm = () => {
           formData.numberOfDoors,
           formData.conditions,
           formData.rating,
+          userId // Pass the logged-in user ID
         )
           if(res){
             console.log(res);

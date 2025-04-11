@@ -1,26 +1,23 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 import { FiMenu, FiX } from "react-icons/fi";
 import authService from "../../appright/auth";
 import { logout as authLogout } from "../../store/authSlice";
 
-
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const authStatus = useSelector((state) => state.auth.status); // Get authentication status from Redux
+  const authStatus = useSelector((state) => state.auth.status);
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Logout function
   const logoutUser = async () => {
     try {
       const res = await authService.logout();
-      if (res)
-      {
-        console.log(res);
-      dispatch(authLogout()); // Update Redux store
-      navigate("/"); // Redirect to home after logout
+      if (res) {
+        dispatch(authLogout());
+        navigate("/");
       }
     } catch (err) {
       console.error(err.message);
@@ -33,41 +30,51 @@ function Navbar() {
         <div className="flex items-center justify-between">
           <div className="text-3xl font-bold text-blue-600">GearUp</div>
           <nav className="hidden md:flex space-x-8">
-          <Link to="/" className="text-gray-600 hover:text-blue-600 transition-colors">Home</Link>
-          <Link to="/about" className="text-gray-600 hover:text-blue-600 transition-colors">About</Link>
-            {!authStatus ? (
-              <>
-                <Link to="/login" className="text-gray-600 hover:text-blue-600 transition-colors">Login</Link>
-                <Link to="/singup" className="text-gray-600 hover:text-blue-600 transition-colors">Signup</Link>
-              </>
-            ) : (
-              <>
-               <Link to={"/userdash"} className="text-gray-600 hover:text-blue-600 transition-colors ">Dashboard</Link>
-              <button onClick={(e)=>logoutUser()} className="text-red-600 hover:text-red-800 transition-colors">Logout</button>
-             </>
-            )} 
-          </nav>
-          <button className="md:hidden text-gray-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </button>
-        </div>
-      </div>
+            <Link to="/" className="text-gray-600 hover:text-blue-600">Home</Link>
+            <Link to="/about" className="text-gray-600 hover:text-blue-600">About</Link>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t">
-          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link to="/vehicles" className="text-gray-600">Vehicles</Link>
-            <Link to="/rentals" className="text-gray-600">Rentals</Link>
-            <Link to="/about" className="text-gray-600">About Us</Link>
-            <Link to="/contact" className="text-gray-600">Contact</Link>
             {!authStatus ? (
               <>
                 <Link to="/login" className="text-gray-600">Login</Link>
                 <Link to="/signup" className="text-gray-600">Signup</Link>
               </>
             ) : (
-              <button onClick={logoutUser} className="text-red-600 hover:text-red-800">Logout</button>
+              <>
+                {isAdmin ? (<>
+                  <Link to="/admin" className="text-blue-600 font-semibold">Admin</Link>
+                  </>
+                )
+                :(<>
+                 <Link to="/userdash" className="text-gray-600">Dashboard</Link>
+                </>)}
+                
+                <button onClick={logoutUser} className="text-red-600">Logout</button>
+              </>
+            )}
+          </nav>
+
+          <button className="md:hidden text-gray-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t">
+          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+            {!authStatus ? (
+              <>
+                <Link to="/login" className="text-gray-600">Login</Link>
+                <Link to="/signup" className="text-gray-600">Signup</Link>
+              </>
+            ) : (
+              <>
+                {isAdmin && (
+                  <Link to="/userdash" className="text-gray-600">Dashboard</Link>
+                )}
+                <Link to="/admin" className="text-blue-600">Admin</Link>
+                <button onClick={logoutUser} className="text-red-600">Logout</button>
+              </>
             )}
           </div>
         </div>

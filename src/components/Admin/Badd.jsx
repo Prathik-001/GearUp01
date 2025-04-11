@@ -3,8 +3,10 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import service from "../../appright/conf";
+import { useSelector } from "react-redux";
 
 const VehicleRentalForm = () => {
+  const userId = useSelector((state) => state.auth.userId);
   const [formData, setFormData] = useState({
     imageId: null,
     image: null,
@@ -12,7 +14,6 @@ const VehicleRentalForm = () => {
     vehicleName: "",
     vehicleType: "",
     fuelType: "",
-    transmissionType: "",
     range: "",
     mileage: "",
     cc: "",
@@ -63,7 +64,6 @@ const VehicleRentalForm = () => {
     if (!formData.vehicleName) newErrors.vehicleName = "Vehicle name is required";
     if (!formData.vehicleType) newErrors.vehicleType = "Vehicle type is required";
     if (!formData.fuelType) newErrors.fuelType = "Fuel type is required";
-    if (!formData.transmissionType) newErrors.transmissionType = "Transmission type is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -130,12 +130,14 @@ const VehicleRentalForm = () => {
           formData.topbox,
           formData.conditions,
           formData.rating,
-          formData.transmissionType
+          userId
         );
 
         if (res) {
           console.log(res);
           alert("Data added");
+          console.log(userId);
+          
           setFormData({
             imageId: null,
             image: null,
@@ -239,18 +241,16 @@ const VehicleRentalForm = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Transmission Type *</label>
+                <label className="block text-sm font-medium text-gray-700">Range</label>
                 <input
-                  type="text"
-                  name="transmissionType"
-                  value={formData.transmissionType}
+                  type="number"
+                  name="range"
+                  value={formData.range}
                   onChange={handleInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
-                {errors.transmissionType && (
-                  <p className="text-sm text-red-600">{errors.transmissionType}</p>
-                )}
               </div>
+
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">CC</label>
@@ -273,16 +273,6 @@ const VehicleRentalForm = () => {
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Range</label>
-                <input
-                  type="number"
-                  name="range"
-                  value={formData.range}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                />
               </div>
 
               <div>
@@ -295,7 +285,6 @@ const VehicleRentalForm = () => {
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
-            </div>
 
             <div className="space-y-4 pt-4">
               {["abs", "gpsNavigation", "topbox"].map((feature) => (

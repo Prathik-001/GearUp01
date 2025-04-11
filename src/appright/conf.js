@@ -32,6 +32,7 @@ export class Service {
     numberOfDoors,
     conditions,
     rating,
+    userId
   ) {
     try {
       return await this.database.createDocument(
@@ -39,27 +40,29 @@ export class Service {
         conf.appwriteCollectionId,
         ID.unique(),
         {
-          vehicleName:vehicleName ,
-          vehicleType:vehicleType,
-          fuelType:fuelType,
-          range:range,
-          mileage:mileage,
-          seats:seats,
-          luggageCapacity:luggageCapacity,
-          rentPrice:rentPrice,
-          airConditioning:airConditioning,
-          gpsNavigation:gpsNavigation,
-          bluetooth:bluetooth,
-          sunroof:sunroof,
-          transmissionType:transmissionType,
-          numberOfDoors:numberOfDoors,
-          conditions:conditions,
-          rating:rating,
-          imageId:imageId,
+          vehicleName,
+          vehicleType,
+          fuelType,
+          range,
+          mileage,
+          seats,
+          luggageCapacity,
+          rentPrice,
+          airConditioning,
+          gpsNavigation,
+          bluetooth,
+          sunroof,
+          transmissionType,
+          numberOfDoors,
+          conditions,
+          rating,
+          imageId,
+          userId,
         }
       );
     } catch (error) {
-      console.log("Appwrite service :: createPost ::car error " + error);
+      console.log("Appwrite service :: createPost :: car error " + error);
+      return false;
     }
   }
 
@@ -70,7 +73,7 @@ export class Service {
     vehicleType,
     fuelType,
     range,
-    mileage, 
+    mileage,
     cc,
     rentPrice,
     abs,
@@ -78,6 +81,7 @@ export class Service {
     topBox,
     conditions,
     rating,
+    userId
   ) {
     try {
       return await this.database.createDocument(
@@ -85,25 +89,29 @@ export class Service {
         conf.appwriteBikeCollectionId,
         ID.unique(),
         {
-          vehicleName:vehicleName,
-          vehicleType:vehicleType,
-          fuelType:fuelType,
-          range:range,
-          mileage:mileage,
-          cc:cc,
-          rentPrice:rentPrice,
-          abs:abs,
-          gpsNavigation:gpsNavigation,
-          topBox:topBox,
-          conditions:conditions,
-          rating:rating,
-          imageId:imageId, 
+          imageId,
+          vehicleName,
+          vehicleType,
+          fuelType,
+          range,
+          mileage,
+          cc,
+          rentPrice,
+          abs,
+          gpsNavigation,
+          topBox,
+          conditions,
+          rating,
+
+          userId 
         }
       );
     } catch (error) {
-      console.log("Appwrite service :: createPost ::  bike error " + error);
+      console.log("Appwrite service :: uploadBikeData :: error", error);
+      return false;
     }
   }
+  
 
   async getVehiclesData() {
     try {

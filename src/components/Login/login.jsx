@@ -5,16 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authSlice";
 
-
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Basic validators
   const validateEmail = (email) => /^[^@]+@[^@]+\.[^@]+$/.test(email);
   const validatePassword = (password) => password.length >= 8;
-  const dispatch=useDispatch();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,25 +25,34 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validate input
     if (!validateEmail(formData.email) || !validatePassword(formData.password)) {
       setErrors({
         email: !validateEmail(formData.email) ? "Please enter a valid email address" : "",
         password: !validatePassword(formData.password) ? "Password must be at least 8 characters" : "",
       });
       return;
-    } 
+    }
     try {
       setIsLoading(true);
-      const user=await authService.login({ email: formData.email, password: formData.password });
-      if (user) {
-        console.log(user);
-        dispatch(login(user));
-      setIsLoading(false);
-      navigate("/");
+      await authService.login({ email: formData.email, password: formData.password });
+      const userData = await authService.getCurrentUser();
+      if (userData) {
+        // Check admin flag: handle both boolean and string "true"
+        const isAdmin = userData.prefs?.isAdmin === true || userData.prefs?.isAdmin === "true";
+        console.log("LoginPage - Resolved isAdmin:", isAdmin);
+        dispatch(login({
+          userData,
+          userId: userData.$id,
+          isAdmin,
+        }));
+        setIsLoading(false);
+        navigate("/"); // Redirect after login
       }
     } catch (error) {
       setIsLoading(false);
       setErrors({ form: "Invalid email or password. Please try again." });
+      console.error("Login error:", error);
     }
   };
 
@@ -109,8 +119,8 @@ const LoginPage = () => {
                 Forgot Password?
               </a>
             </div>
-            </div>
-            
+          </div>
+          
           <button
             type="submit"
             className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-lg text-white ${isLoading ? 'bg-blue-300' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-colors duration-200`}
@@ -119,11 +129,11 @@ const LoginPage = () => {
             {isLoading ? "Signing in..." : "Sign In"}
           </button>
           <p className="text-center text-sm text-gray-600">
-          Don't have an account?{" "}
-          <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-            Sign up
-          </a>
-        </p>
+            Don't have an account?{" "}
+            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+              Sign up
+            </a>
+          </p>
         </form>
       </div>
     </div>

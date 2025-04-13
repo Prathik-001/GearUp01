@@ -139,7 +139,7 @@ useEffect(() => {
 
   const BikeSection = () => (
     <div className="grid">
-      <Link to={'/badd'}>
+      <Link to={'badd'}>
           <button className=" text-xl font-semibold px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mb-4">
             Add New Bike
           </button></Link>
@@ -173,7 +173,7 @@ useEffect(() => {
 
   const CarSection = () => (
     <div className="grid">
-    <Link to={'/add'}>
+    <Link to={'add'}>
         <button className=" text-xl font-semibold px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 mb-4">
           Add New Car
         </button></Link>

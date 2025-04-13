@@ -25,6 +25,7 @@ import BikeInfo from "./components/Cards/bmore.jsx"
 import Badd from './components/Admin/Badd.jsx';
 import Bmore from './components/Cards/bmore.jsx'
 import CardList from './components/Admin/CardList.jsx';
+import AdminLayout from './components/Admin/AdminLayout.jsx';
 const router= createBrowserRouter([
   {
     path:"/",
@@ -66,10 +67,7 @@ const router= createBrowserRouter([
         path:"/bike-info/:id",
         element:<BikeInfo />
       },
-      {
-        path:"/badd",
-        element:<Badd/>
-      },
+
       {
         path:"/more",
         element:<Bmore />
@@ -83,12 +81,30 @@ const router= createBrowserRouter([
         element:<Singup />
       },
       {
-        path:"/admin",
-        element:<Admin />
+        path:"/FY5675ytrytavytf6gvyvhCXt",
+        element:<AdminLayout/>,
+        children:[
+          { 
+            index: true, 
+            element: <Admin /> 
+          },
+          {
+            path:"add",
+            element:<Add />,
+          },
+          {
+            path:"badd",
+            element:<Badd/>,
+          },
+          {
+            path:"clist",
+            element:<CardList />,
+          },
+        ]
       },
       {
-        path:"/add",
-        element:<Add />
+        path:"/bmore",
+        element:<Bmore />,
       },
       {
         path:"/userdash",
@@ -97,14 +113,6 @@ const router= createBrowserRouter([
       {
         path:"/about",
         element:<About />
-      },
-      {
-        path:"/bmore",
-        element:<Bmore />
-      },
-      {
-        path:"/clist",
-        element:<CardList />
       },
     ],
   },

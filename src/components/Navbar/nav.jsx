@@ -30,24 +30,23 @@ function Navbar() {
         <div className="flex items-center justify-between">
           <div className="text-3xl font-bold text-blue-600">GearUp</div>
           <nav className="hidden md:flex space-x-8">
-            <Link to="/" className="text-gray-600 hover:text-blue-600">Home</Link>
-            <Link to="/about" className="text-gray-600 hover:text-blue-600">About</Link>
+            <Link to="/" className="text-gray-600 font-semibold hover:text-blue-600">Home</Link>
+            <Link to="/about" className="text-gray-600 font-semibold hover:text-blue-600">About</Link>
 
             {!authStatus ? (
               <>
-                <Link to="/login" className="text-gray-600">Login</Link>
-                <Link to="/signup" className="text-gray-600">Signup</Link>
+                <Link to="/login" className="text-gray-600 font-semibold hover:text-blue-600">Login</Link>
+                <Link to="/signup" className="text-gray-600 font-semibold hover:text-blue-600">Signup</Link>
               </>
             ) : (
               <>
                 {isAdmin ? (<>
-                  <Link to="/admin" className="text-blue-600 font-semibold">Admin</Link>
+                  <Link to="/FY5675ytrytavytf6gvyvhCXt" className="text-gray-600 font-semibold hover:text-blue-600">Admin</Link>
                   </>
                 )
                 :(<>
-                 <Link to="/userdash" className="text-gray-600">Dashboard</Link>
+                 <Link to="/userdash" className="text-gray-600 font-semibold hover:text-blue-600">Dashboard</Link>
                 </>)}
-                
                 <button onClick={logoutUser} className="text-red-600">Logout</button>
               </>
             )}

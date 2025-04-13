@@ -27,8 +27,8 @@ const ViewAllCar = () => {
   ];
 
   useEffect(() => {
-    service.getVehiclesData()
-      .then((data) => setVehicles(data.documents))
+    service.getAllCarsData()
+      .then((data) => setVehicles(data))
       .catch((err) => console.log(err));
   }, []);
 

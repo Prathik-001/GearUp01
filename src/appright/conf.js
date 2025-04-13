@@ -112,31 +112,59 @@ export class Service {
     }
   }
   
-
-  async getVehiclesData() {
+// Fetch all cars (with pagination)
+  async getAllCarsData() {
     try {
-      return await this.database.listDocuments(
-        conf.appwriteDatabaseId,
-        conf.appwriteCollectionId
-      );
+      const allDocs = [];
+      let offset = 0;
+      const limit = 100;
+      let fetched;
+  
+      do {
+        const res = await this.database.listDocuments(
+          conf.appwriteDatabaseId,
+          conf.appwriteCollectionId,
+          [Query.limit(limit), Query.offset(offset)]
+        );
+  
+        fetched = res.documents;
+        allDocs.push(...fetched);
+        offset += limit;
+      } while (fetched.length === limit);
+  
+      return allDocs;
     } catch (error) {
-      console.log("Appwrite service :: getData :: error " + error);
+      console.log("Appwrite service :: getAllVehiclesData :: error " + error);
       return false;
     }
   }
-
-  async getBikesData() {
+  
+//  Fetch all bikes (with pagination)
+  async getAllBikesData() {
     try {
-      return await this.database.listDocuments(
-        conf.appwriteDatabaseId,
-        conf.appwriteBikeCollectionId
-      );
+      const allDocs = [];
+      let offset = 0;
+      const limit = 100;
+      let fetched;
+  
+      do {
+        const res = await this.database.listDocuments(
+          conf.appwriteDatabaseId,
+          conf.appwriteBikeCollectionId,
+          [Query.limit(limit), Query.offset(offset)]
+        );
+  
+        fetched = res.documents;
+        allDocs.push(...fetched);
+        offset += limit;
+      } while (fetched.length === limit);
+  
+      return allDocs;
     } catch (error) {
-      console.log("Appwrite service :: getData :: error " + error);
+      console.log("Appwrite service :: getAllBikesData :: error " + error);
       return false;
     }
   }
-
   // async getWishlistedCourses(numbers) {
   //   try {
   //     return await this.database.listDocuments(

@@ -132,8 +132,8 @@ const AdminPanel = () => {
   );
 // fetching the bike data
 useEffect(() => {
-  service.getBikesData ()
-    .then((data) => setBikeVehicles(data.documents))
+  service.getAllBikesData ()
+    .then((data) => setBikeVehicles(data))
     .catch((err) => console.log(err));
   }, []);
 
@@ -166,8 +166,8 @@ useEffect(() => {
 
 // fetching the bike data
   useEffect(() => {
-    service.getVehiclesData ()
-      .then((data) => setCarVehicles(data.documents))
+    service.getAllCarsData ()
+      .then((data) => setCarVehicles(data))
       .catch((err) => console.log(err));
     }, []);
 

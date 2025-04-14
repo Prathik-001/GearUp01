@@ -228,6 +228,7 @@ const VehicleRentalForm = () => {
                     value={formData.vehicleName}
                     onChange={handleInputChange}
                     maxLength={50}
+                    required
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                   {errors.vehicleName && (
@@ -242,6 +243,7 @@ const VehicleRentalForm = () => {
                     name="vehicleType"
                     value={formData.vehicleType}
                     onChange={handleInputChange}
+                    required
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                   {errors.vehicleType && (
@@ -260,6 +262,7 @@ const VehicleRentalForm = () => {
                     onChange={handleInputChange}
                     min="1"
                     max="10"
+                    required
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
@@ -272,6 +275,7 @@ const VehicleRentalForm = () => {
                     value={formData.luggageCapacity}
                     onChange={handleInputChange}
                     min="0"
+                    required
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
@@ -287,6 +291,7 @@ const VehicleRentalForm = () => {
                     onChange={handleInputChange}
                     min="0"
                     step="0.1"
+                    required
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
@@ -300,6 +305,7 @@ const VehicleRentalForm = () => {
                     onChange={handleInputChange}
                     min="2"
                     max="5"
+                    required
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>

@@ -4,15 +4,17 @@ import { BsLightningChargeFill, BsFuelPump } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import service from "../../appright/conf.js";
 
-const VehicleCard = ({ vehicle }) => {
+const VehicleCard = ({ vehicle, onViewMore }) => {
   const [fileId, setFileId] = useState(vehicle?.imageId);
- const [url,seturl]=useState(service.getFilePreiview(fileId))
+  const [url, setUrl] = useState(service.getFilePreiview(fileId));
 
- useEffect(()=>{
-  seturl(url.replace("preview","view")+"&mode=admin")
- },[])
+  useEffect(() => {
+    if (fileId) {
+      setUrl(service.getFilePreiview(fileId).replace("preview", "view") + "&mode=admin");
+    }
+  }, [fileId]);
+
   const getFuelTypeIcon = (fuelType) => {
-    
     switch (fuelType) {
       case "Electric":
         return (
@@ -53,7 +55,9 @@ const VehicleCard = ({ vehicle }) => {
   };
 
   const getLuxuryStars = (level) => {
-    return [...Array(level)].map((_, index) => (
+    const maxRating = 5;
+    const clampedRating = Math.min(level, maxRating);
+    return [...Array(clampedRating)].map((_, index) => (
       <FaStar key={index} className="text-yellow-400 mb-2" />
     ));
   };
@@ -79,20 +83,15 @@ const VehicleCard = ({ vehicle }) => {
     }
   };
 
-  return vehicle ? (
+  return vehicle && vehicle.vehicleName && vehicle.vehicleType ? (
     <div className="max-w-sm w-full">
       <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
         <div className="h-48 overflow-hidden">
-          <img
-            src={ url /*service.getFilePreiview(fileId) */}
-            className="w-full h-full object-cover"
-          />
+          <img src={url} alt={`Image of ${vehicle.vehicleName}`} className="w-full h-full object-cover" />
         </div>
 
         <div className="p-4 space-y-3">
-          <h2 className="text-lg font-bold text-gray-800 line-clamp-2">
-            {vehicle.vehicleName}
-          </h2>
+          <h2 className="text-lg font-bold text-gray-800 line-clamp-2">{vehicle.vehicleName}</h2>
 
           <div className="flex items-center justify-between">
             <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTypeColor(vehicle.vehicleType)}`}>
@@ -107,19 +106,19 @@ const VehicleCard = ({ vehicle }) => {
             <span className="text-gray-700">{vehicle.range} km range</span>
           </div>
 
-          <div className="flex items-center space-x-1">
-            {getLuxuryStars(vehicle.rating)}
-          </div>
-
-          <Link to={`/car-info/${vehicle.$id}`}>
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+          <div className="flex items-center space-x-1">{getLuxuryStars(vehicle.rating)}</div>
+            <button
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
+              onClick={() => onViewMore(vehicle.$id)}
+            >
               View More
-            </button>
-          </Link>
+            </button> 
         </div>
       </div>
     </div>
-  ) : null;
+  ) : (
+    <div className="mt-48 text-center text-gray-500">Vehicle details are not available.</div>
+  );
 };
 
 export default VehicleCard;

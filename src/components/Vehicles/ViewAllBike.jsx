@@ -1,154 +1,99 @@
 import { useState, useEffect } from "react";
-import { FaSearch, FaTimes, FaGasPump, FaBolt, FaLeaf } from "react-icons/fa";
-import VehicleCard from "./BikeCard";
+import VehicleCard from "./CarCard";
+import { IoCloseCircleOutline } from "react-icons/io5";
 import service from "../../appright/conf";
+import BikeInfo from "../Cards/bmore";
 
 const ViewAllCar = () => {
   const [vehicles, setVehicles] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTypes, setSelectedTypes] = useState([]);
-  const [selectedFuel, setSelectedFuel] = useState([]);
-  const [selectedMileage, setSelectedMileage] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const vehicleTypes = ["Sedan", "SUV", "Hatchback", "Luxury", "Convertible"];
-  const fuelTypes = [
-    { name: "Petrol", icon: <FaGasPump /> },
-    { name: "Diesel", icon: <FaGasPump /> },
-    { name: "Electric", icon: <FaBolt /> },
-    { name: "Hybrid", icon: <FaLeaf /> },
-  ];
-  const mileageRanges = [
-    "0-5,000 miles",
-    "5,000-10,000 miles",
-    "10,000-20,000 miles",
-    "20,000+ miles",
-  ];
+  const [selectedCarId, setSelectedCarId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     service.getAllBikesData()
-      .then((data) => setVehicles(data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        setVehicles(data);
+        setFilteredVehicles(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Failed to load vehicle data. Please try again later.");
+      });
   }, []);
 
-  useEffect(() => {
-    let filtered = vehicles;
+  const handleViewMore = (id) => {
+    setSelectedCarId(id);
+  };
 
-    if (searchTerm.trim()) {
-      filtered = filtered.filter((vehicle) =>
-        vehicle.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+  const closeCarInfo = () => {
+    setSelectedCarId(null);
+  };
 
-    if (selectedTypes.length > 0) {
-      filtered = filtered.filter((vehicle) => selectedTypes.includes(vehicle.type));
-    }
-
-    if (selectedFuel.length > 0) {
-      filtered = filtered.filter((vehicle) => selectedFuel.includes(vehicle.fuelType));
-    }
-
-    if (selectedMileage) {
-      const [min, max] = selectedMileage.replace(/[^0-9-]/g, "").split("-").map(Number);
-      filtered = filtered.filter((vehicle) => {
-        const mileage = parseInt(vehicle.range, 10);
-        return max ? mileage >= min && mileage <= max : mileage >= min;
+  const handleSearch = () => {
+    service.searcBikes(searchQuery)
+      .then((results) => {
+        setFilteredVehicles(results);
+      })
+      .catch((err) => {
+        console.error("Error searching cars:", err);
       });
-    }
-
-    setFilteredVehicles(filtered);
-  }, [searchTerm, selectedTypes, selectedFuel, selectedMileage, vehicles]);
-
-  const clearFilters = () => {
-    setSearchTerm("");
-    setSelectedTypes([]);
-    setSelectedFuel([]);
-    setSelectedMileage("");
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 min-h-screen bg-white w-full px-2 py-2">
-      <button
-        className="lg:hidden mb-4 p-2 bg-blue-500 text-white rounded"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        {isSidebarOpen ? "Close Filters" : "Show Filters"}
-      </button>
-
-      {/* Sidebar */}
-      <div className={`w-full md:w-1/4 lg:w-1/5 bg-gray-100 p-4 rounded-lg shadow-md ${isSidebarOpen ? "block" : "hidden md:block"}`}>
-        {/* Search Bar */}
-        <div className="relative flex items-center gap-2 mb-4">
-          <FaSearch className="absolute left-3 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search vehicles..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-          {searchTerm && <FaTimes className="absolute right-3 cursor-pointer text-gray-400" onClick={() => setSearchTerm("")} />}
-        </div>
-
-        {/* Vehicle Type */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Vehicle Type</h3>
-          {vehicleTypes.map((type) => (
-            <label key={type} className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="vehicleType"
-                checked={selectedTypes.includes(type)}
-                onChange={() => setSelectedTypes([type])}
-                className="form-radio text-blue-500"
-              />
-              {type}
-            </label>
-          ))}
-        </div>
-
-        {/* Fuel Type */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Fuel Type</h3>
-          {fuelTypes.map((type) => (
-            <label key={type.name} className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="fuelType"
-                checked={selectedFuel.includes(type.name)}
-                onChange={() => setSelectedFuel([type.name])}
-                className="form-radio text-blue-500"
-              />
-              {type.icon} {type.name}
-            </label>
-          ))}
-        </div>
-
-        {/* Clear Filters */}
-        <button onClick={clearFilters} className="w-full py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-          Clear All Filters
+    <div className="relative w-full">
+      {/* Search Bar */}
+      <div className="flex items-center justify-center w-full p-2 mt-1 gap-2 bg-gray-50 rounded-xl shadow-md">
+        <input
+          type="text"
+          placeholder="Search by name, type, or fuel..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-4 py-2 border rounded-lg w-full max-w-md"
+        />
+        <button
+          onClick={handleSearch}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+        >
+          Search
         </button>
       </div>
 
-      {/* Vehicles List */}
-      <div className=" px-4 py-5 bg-gray-200 w-4/5  rounded-lg ">
-            {vehicles?.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No vehicles found matching your criteria
+      {/* 🚘 Cars List */}
+      <div className={`${selectedCarId ? "blur-sm pointer-events-none select-none" : ""}`}>
+        {filteredVehicles?.length === 0 ? (
+          <div className="text-center py-12 text-gray-500 text-lg">
+            No vehicles found matching your criteria
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-6">
+            {filteredVehicles.map((vehicle) => (
+              <div
+                key={vehicle.$id}
+                className="bg-white rounded-2xl shadow-md overflow-hidden transform transition-transform hover:scale-95"
+              >
+                <VehicleCard vehicle={vehicle} onViewMore={handleViewMore} />
               </div>
-            ) : (
-              <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
-              {
-              vehicles.map((vehicle) => (
-                <div key={Math.random()*20} className=" rounded-lg  gap-1 overflow-hidden transition-transform hover:scale-95">
-                  <VehicleCard vehicle={vehicle} />
-                </div>
-              ))}
-              </div>
-            )}
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* 🔍 Modal for Car Info */}
+      {selectedCarId && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative bg-gray-200 rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <button
+              className="absolute top-3 right-3 text-white  text-3xl py-2 px-2 rounded-full z-10 hover:text-red-600"
+              onClick={closeCarInfo}>
+              <IoCloseCircleOutline/>
+            </button>
+            <BikeInfo id={selectedCarId} />
           </div>
         </div>
+      )}
+    </div>
   );
 };
 

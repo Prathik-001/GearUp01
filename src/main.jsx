@@ -26,6 +26,7 @@ import Badd from './components/Admin/Badd.jsx';
 import Bmore from './components/Cards/bmore.jsx'
 import CardList from './components/Admin/CardList.jsx';
 import AdminLayout from './components/Admin/AdminLayout.jsx';
+import PaymentRecipt from './components/Booking/PaymentRecipt.jsx'
 const router= createBrowserRouter([
   {
     path:"/",
@@ -114,6 +115,11 @@ const router= createBrowserRouter([
         path:"/about",
         element:<About />
       },
+      {
+        path:"/recipt",
+        element:<PaymentRecipt/>
+      }
+    
     ],
   },
 ],)

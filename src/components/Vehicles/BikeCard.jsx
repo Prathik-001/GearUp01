@@ -4,7 +4,7 @@ import { BsLightningChargeFill, BsFuelPump } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import service from "../../appright/conf.js";
 
-const VehicleCard = ({ vehicle }) => {
+const VehicleCard = ({ vehicle,onViewMore}) => {
   const [fileId, setFileId] = useState(vehicle?.imageId);
  const [url,seturl]=useState(service.getFilePreiview(fileId))
 
@@ -110,12 +110,10 @@ const VehicleCard = ({ vehicle }) => {
           <div className="flex items-center space-x-1">
             {getLuxuryStars(vehicle.rating)}
           </div>
-
-          <Link to={`/bike-info/${vehicle.$id}`}>
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
+            onClick={() => onViewMore(vehicle.$id)}>
               View More
             </button>
-          </Link>
         </div>
       </div>
     </div>

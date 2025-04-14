@@ -244,6 +244,75 @@ async deleteBike(documentId) {
   }
 }
 
+// search car
+
+async searchCars(query) {
+  try {
+    const allDocs = [];
+    let offset = 0;
+    const limit = 100;
+    let fetched;
+
+    do {
+      const res = await this.database.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollectionId,
+        [Query.limit(limit), Query.offset(offset)]
+      );
+
+      fetched = res.documents;
+      allDocs.push(...fetched);
+      offset += limit;
+    } while (fetched.length === limit);
+
+    // Filter the vehicles based on the query
+    const filteredVehicles = allDocs.filter((vehicle) =>
+      vehicle.vehicleName?.toLowerCase().includes(query.toLowerCase()) ||
+      vehicle.vehicleType?.toLowerCase().includes(query.toLowerCase()) ||
+      vehicle.fuelType?.toLowerCase().includes(query.toLowerCase())
+    );
+
+    return filteredVehicles;
+  } catch (error) {
+    console.log("Appwrite service :: searchCars :: error " + error);
+    return false;
+  }
+}
+
+// search bike
+async searcBikes(query) {
+  try {
+    const allDocs = [];
+    let offset = 0;
+    const limit = 100;
+    let fetched;
+
+    do {
+      const res = await this.database.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteBikeCollectionId,
+        [Query.limit(limit), Query.offset(offset)]
+      );
+
+      fetched = res.documents;
+      allDocs.push(...fetched);
+      offset += limit;
+    } while (fetched.length === limit);
+
+    // Filter the vehicles based on the query
+    const filteredVehicles = allDocs.filter((vehicle) =>
+      vehicle.vehicleName?.toLowerCase().includes(query.toLowerCase()) ||
+      vehicle.vehicleType?.toLowerCase().includes(query.toLowerCase()) ||
+      vehicle.fuelType?.toLowerCase().includes(query.toLowerCase())
+    );
+
+    return filteredVehicles;
+  } catch (error) {
+    console.log("Appwrite service :: searchCars :: error " + error);
+    return false;
+  }
+}
+
   // async getCourseByTopic(topic) {
   //   try {
   //     return await this.database.listDocuments(

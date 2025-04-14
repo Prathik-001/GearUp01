@@ -3,77 +3,75 @@ import { FaBox, FaDrumSteelpan, FaCar, FaGasPump, FaCogs, FaUsers, FaSuitcase, F
 import service from "../../appright/conf";
 import { useNavigate, useParams } from "react-router-dom";
 
-const BikeInfo = () => {
+const BikeInfo = ({id}) => {
+  const [bike, setBike] = useState();
+  const [fileId, setFileId] = useState(null);
+  const [url,seturl]=useState(service.getFilePreiview(fileId))
   const [isExpanded, setIsExpanded] = useState(false);
-  const [car, setCar] = useState();
-  const [isFecthing, setIsFetching] = useState(true);
-  const { id } = useParams();
-    const [fileId, setFileId] = useState("");
-    const navigate = useNavigate();
   
-
   const handleExpandClick = () => {
     setIsExpanded(!isExpanded);
   };
   
-const InfoItem = ({ icon, label, value }) => (
-  <div className="flex items-center gap-2">
-    <span className="text-blue-600">{icon}</span>
-    <div>
-      <p className="text-gray-600 text-sm">{label}</p>
-      <p className="font-semibold">{value}</p>
+  const InfoItem = ({ icon, label, value }) => (
+    <div className="flex items-center gap-2">
+      <span className="text-blue-600">{icon}</span>
+      <div>
+        <p className="text-gray-600 text-sm">{label}</p>
+        <p className="font-semibold">{value}</p>
+      </div>
     </div>
-  </div>
-);
+  );
 
-const Feature = ({ icon, label, available, value }) => (
-  <div className="flex items-center gap-2">
-    <span className="text-blue-600">{icon}</span>
-    <div>
-      <p className="text-gray-600">{label}</p>
-      {available !== undefined ? (
-        <span className={available ? "text-green-500" : "text-red-500"}>
-          {available ? "Available" : "Not Available"}
-        </span>
-      ) : (
-        <span className="font-semibold">{value}</span>
-      )}
+  const Feature = ({ icon, label, available, value }) => (
+    <div className="flex items-center gap-2">
+      <span className="text-blue-600">{icon}</span>
+      <div>
+        <p className="text-gray-600">{label}</p>
+        {available !== undefined ? (
+          <span className={available ? "text-green-500" : "text-red-500"}>
+            {available ? "Available" : "Not Available"}
+          </span>
+        ) : (
+          <span className="font-semibold">{value}</span>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+
   useEffect(() => {
-    if (id) {
-      if(isFecthing){
-        service.getBikeInfo(id)
-        .then((res) => {
-          if (res) {
-            setCar(res);
-            setFileId(res.imageId);
-          } 
-        })
-        .then(() => setIsFetching(false))
-        .catch((err)=> console.log(err));
-      }
-    } else navigate("/");
-  }), [id];
+    if (bike?.imageId) {
+      setFileId(bike.imageId);
+    }
+  }, [bike]);
 
-  
-  console.log(service.getFilePreiview(fileId));
+  useEffect(() => {
+    if (fileId) {
+      const previewUrl = service.getFilePreiview(fileId);
+      seturl(previewUrl.replace("preview", "view") + "&mode=admin");
+    }
+  }, [fileId]);
+
+  useEffect(() => {
+    service.getBikeInfo(id).then(setBike);
+  }, [id]);
+
+  if (!bike) 
+    return <div className="p-6 text-center">Loading car details...</div>;
+    
+    console.log(service.getFilePreiview(fileId));
   
 
-  return car?(
+  return (
     <div className="max-w-4xl mx-auto p-4 mt">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
         {/* Image Section */}
-        <div className=" relative h-64 overflow-hidden">
-        <img
-                src={service.getFilePreiview(fileId)}
-                className="w-full h-full object-cover"
-              />
+        <div className="relative h-64 w-full overflow-hidden rounded-2xl shadow-lg">
+          <img src={url} alt={`Image of ${bike.vehicleName}`} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"/>
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-            <h2 className="text-2xl font-bold text-white">{car.vehicleName}</h2>
-            <p className="text-white/90 flex items-center gap-2">
-              <FaCar /> {car.vehicleType}
+            <h2 className="text-2xl font-bold text-white">{bike.vehicleName}</h2>
+            <p className="text-white/90 flex items-center gap-2 mt-1">
+            <FaCar /> {bike.vehicleType}
             </p>
           </div>
         </div>
@@ -81,10 +79,10 @@ const Feature = ({ icon, label, available, value }) => (
         {/* Main Info Section */}
         <div className="p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <InfoItem icon={<FaGasPump />} label="Fuel" value={car.fuelType} />
-            <InfoItem icon={<FaTachometerAlt />} label="Mileage" value={car.mileage} />
+            <InfoItem icon={<FaGasPump />} label="Fuel" value={bike.fuelType} />
+            <InfoItem icon={<FaTachometerAlt />} label="Mileage" value={bike.mileage} />
             <InfoItem icon={<FaUsers />} label="Seats" value="2" />
-            <InfoItem icon={<FaSuitcase />} label="CC" value={car.cc} />
+            <InfoItem icon={<FaSuitcase />} label="CC" value={bike.cc} />
           </div>
 
           {/* Rental Price Section */}
@@ -92,7 +90,7 @@ const Feature = ({ icon, label, available, value }) => (
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-gray-600">Rental Price</p>
-                <p className="text-3xl font-bold text-blue-600">₹{car.rentPrice}</p>
+                <p className="text-3xl font-bold text-blue-600">₹{bike.rentPrice}</p>
                 <p className="text-sm text-gray-500">per day</p>
               </div>
               <div className="text-right">
@@ -109,14 +107,14 @@ const Feature = ({ icon, label, available, value }) => (
           {/* Expandable Features Section */}
           <div className={`transition-all duration-300 ${isExpanded ? "max-h-96" : "max-h-0 overflow-hidden"}`}>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-4">
-              <Feature icon={<FaDrumSteelpan />} label="ABS" available={car.abs} />
-              <Feature icon={<FaMapMarkedAlt />} label="GPS Navigation" available={car.gpsNavigation} />
-              <Feature icon={<FaBox />} label="Top Box" available={car.topBox} />
+              <Feature icon={<FaDrumSteelpan />} label="ABS" available={bike.abs} />
+              <Feature icon={<FaMapMarkedAlt />} label="GPS Navigation" available={bike.gpsNavigation} />
+              <Feature icon={<FaBox />} label="Top Box" available={bike.topBox} />
             </div>
 
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <h3 className="font-semibold mb-2">Rental Conditions</h3>
-              <p className="text-gray-600">{car.conditions}</p>
+              <p className="text-gray-600">{bike.conditions}</p>
             </div>
           </div>
 
@@ -130,7 +128,7 @@ const Feature = ({ icon, label, available, value }) => (
         </div>
       </div>
     </div>
-  ):null;
+  )
 };
 
 

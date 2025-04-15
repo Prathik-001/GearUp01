@@ -13,6 +13,28 @@ export class Service {
     this.database = new Databases(this.client);
     this.bucket = new Storage(this.client);
   }
+ 
+  // user data
+  async uploadUserData(id,{Name,Email,Phone,State,District,Pincode}){
+    try {
+        return await this.database.createDocument(
+            conf.appwriteDatabaseId,
+            conf.appwriteUserCollectionId,
+             id,
+             {
+             name: Name,
+             email: Email,
+             phone: Phone,
+             state: State,
+             district: District,
+             pincode: Pincode    
+           }
+        ) 
+    } catch (error) {
+        console.log("createUsetData",error);
+    }
+}
+
   // Car database
   async uploadData(
     imageId,
@@ -108,6 +130,33 @@ export class Service {
       );
     } catch (error) {
       console.log("Appwrite service :: uploadBikeData :: error", error);
+      return false;
+    }
+  }
+  // Fetch all users
+
+  async getAllUsersData() {
+    try {
+      const allDocs = [];
+      let offset = 0;
+      const limit = 100;
+      let fetched;
+  
+      do {
+        const res = await this.database.listDocuments(
+          conf.appwriteDatabaseId,
+          conf.appwriteUserCollectionId,
+          [Query.limit(limit), Query.offset(offset)]
+        );
+  
+        fetched = res.documents;
+        allDocs.push(...fetched);
+        offset += limit;
+      } while (fetched.length === limit);
+  
+      return allDocs;
+    } catch (error) {
+      console.log("Appwrite service :: getAllUserData :: error " + error);
       return false;
     }
   }
@@ -213,6 +262,21 @@ export class Service {
     } catch (error) {
       console.log("Appwrite service :: getData :: error " + error);
       return false;
+    }
+  }
+
+
+  // Delete a user document
+  async deleteUser(documentId) {
+    try {
+      return await this.database.deleteDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteUserCollectionId,
+        documentId
+      );
+    } catch (error) {
+      console.log("Appwrite service :: deleteUser :: error " + error);
+      throw error;
     }
   }
 

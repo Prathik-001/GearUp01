@@ -36,7 +36,7 @@ function Navbar() {
             {!authStatus ? (
               <>
                 <Link to="/login" className="text-gray-600 font-semibold hover:text-blue-600">Login</Link>
-                <Link to="/signup" className="text-gray-600 font-semibold hover:text-blue-600">Signup</Link>
+                <Link to="/singup" className="text-gray-600 font-semibold hover:text-blue-600">Signup</Link>
               </>
             ) : (
               <>

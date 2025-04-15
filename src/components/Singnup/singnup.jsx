@@ -5,6 +5,7 @@ import authService  from "../../appright/auth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authSlice"
+import service from "../../appright/conf";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,9 @@ const Signup = () => {
     email: "",
     phone: "",
     password: "",
+    state:"",
+    district:"",
+    pincode:"",
     confirmPassword: "",
     terms: false
   });
@@ -109,28 +113,38 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
-    try{
+    e.preventDefault(); // Prevent page reload
+    try {
       setIsLoading(true);
-     let res = await authService.createAccount({ name: formData.username, email: formData.email, phone: formData.phone, password: formData.password });
-      if (res) {
-        console.log(res);
-        dispatch(login(res));
-        setIsLoading(false);
-        navigate("/")
-    }
-   }
-    catch(error){
-      console.log(error)
-      
-    }
-    
-    // // Simulating API call
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    //   alert("Sign up successful!");
-    // }, 2000);
-  };
   
+      const res = await authService.createAccount({
+        name: formData.username,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password
+      });
+  
+      if (res) {
+        const userData = res; // or res.user depending on the structure of `res`
+  
+        const personalData = await service.uploadUserData(userData.userId, {
+          Name: formData.username,
+          Email: formData.email,
+          Phone: parseInt(formData.phone),
+          State: formData.state,
+          District: formData.district,
+          Pincode: parseInt(formData.pincode)
+        });
+        dispatch(login({ userData, personalData }));
+        console.log(personalData);
+        setIsLoading(false);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+      setIsLoading(false);
+    }
+  };
 
   const isFormValid = () => {
     return (
@@ -197,6 +211,78 @@ const Signup = () => {
               />
               {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
             </div>
+
+            <div>
+                <label htmlFor="state" className="text-sm font-medium text-gray-700">
+                  State
+                </label>
+                <select
+                  id="state"
+                  name="state"
+                  required
+                  className={`appearance-none block w-full px-3 py-2 border ${
+                    errors.state ? 'border-red-300' : 'border-gray-300'
+                  } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                  value={formData.state}
+                  onChange={handleChange}
+                >
+                  <option value="">Select a state</option>
+                  <option value="Andhra Pradesh">Andhra</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                  <option value="Ladakh">Ladakh</option>
+                </select>
+                {errors.state && (
+                  <p className="text-red-500 text-xs mt-1">{errors.state}</p>
+                )}
+              </div>
+
+            <div className="grid grid-cols-1 gap-y-2 gap-x-4 sm:grid-cols-2">
+
+              <div>
+                <label htmlFor="district" className="text-sm font-medium text-gray-700">District</label>
+                <input
+                  id="district"
+                  name="district"
+                  type="text"
+                  required
+                  className={`appearance-none block w-full px-3 py-2 border ${errors.district ? 'border-red-300' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                  value={formData.district}
+                  onChange={handleChange}
+                />
+                {errors.district && <p className="text-red-500 text-xs mt-1">{errors.district}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="district" className="text-sm font-medium text-gray-700">Pincode</label>
+                <input
+                  id="pincode"
+                  name="pincode"
+                  type="number"
+                  max={6}
+                  required
+                  className={`appearance-none block w-full px-3 py-2 border ${errors.pincode ? 'border-red-300' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                  value={formData.pincode}
+                  onChange={handleChange}
+                />
+                {errors.district && <p className="text-red-500 text-xs mt-1">{errors.pincode}</p>}
+              </div>
+
+            </div>
+
+
+
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>

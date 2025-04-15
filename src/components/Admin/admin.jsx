@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FiUsers, FiTruck, FiBookOpen, FiDollarSign, FiMenu,} from "react-icons/fi";
-import { FaCar, FaMotorcycle,} from "react-icons/fa";
+import { FaCar, FaMotorcycle, FaUser,} from "react-icons/fa";
 import { MdDirectionsBike, MdDirectionsCar } from "react-icons/md";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import service from "../../appright/conf";
 import VehicleCardList from './CardList';
-
-
-const mockUsers = [
-  { id: 1, name: "John Doe", email: "john@example.com", registrationDate: "2024-01-15", status: "Active" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com", registrationDate: "2024-01-16", status: "Active" },
-];
+import UserData from "./UserData";
 
 
 const mockBookings = [
@@ -31,7 +26,8 @@ const AdminPanel = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [bike, setBikeVehicles] = useState([]);
-  const [car, setCarVehicles] = useState([]); 
+  const [car, setCarVehicles] = useState([]);
+  const [user,setUserData]=useState([]);
 
   const DashboardCards = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -39,7 +35,7 @@ const AdminPanel = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-gray-500 text-sm">Total Users</p>
-            <h3 className="text-2xl font-bold text-blue-600">{}</h3>
+            <h3 className="text-2xl font-bold text-blue-600">{user.length}</h3>
           </div>
           <FiUsers className="text-3xl text-blue-500" />
         </div>
@@ -87,48 +83,43 @@ const AdminPanel = () => {
     </div>
   );
 
+ // User fetching
+  useEffect(() => {
+    service.getAllUsersData()
+      .then((data) => setUserData(data))
+      .catch((err) => console.log(err));
+  }, []);
+
   const UsersTable = () => (
-    <div className="mt-4">
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search users by name, email, or ID"
-          className="w-full p-2 border rounded-lg"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg overflow-hidden">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">ID</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Name</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Email</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Registration Date</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {mockUsers.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">{user.id}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">{user.name}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">{user.email}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">
-                  {format(new Date(user.registrationDate), "MMM dd, yyyy")}
-                </td>
-                <td className="px-6 py-4 text-sm">
-                  <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                    {user.status}
-                  </span>
-                </td>
-              </tr>
+  <div >
+    {/* <div className="grid grid-cols-6 flex-grow gap-24">
+      <div className="text-gray-900 font-medium">Name</div>
+      <div className="text-gray-900 font-medium">Phone</div>
+      <div className="text-gray-900 font-medium">Email ID</div>
+      <div className="text-gray-900 font-medium">State</div>
+      <div className="text-gray-900 font-medium">District</div>
+      <div className="text-gray-900 font-medium">Pincode</div>
+    </div> */}
+    <div>
+           {user.length === 0 ? (
+                <div className="text-center py-12">
+                  <FaUser className="mx-auto text-6xl text-gray-300 mb-4" />
+                  <p className="text-gray-500 text-xl">No User Found</p>
+                </div>
+              ) : (
+                <div>
+                  {user.map((u) => (
+                    <div key={Math.random()*20} className="mt-3 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 hover:scale-100" >
+                    <UserData
+                    key={u}
+                    user={u}
+                    onDelete={handleDeleteUser}/>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+            </div>
+          )}
+          </div>
+</div>
   );
 // fetching the bike data
 useEffect(() => {
@@ -199,6 +190,21 @@ useEffect(() => {
           </div>
     </div>
   );
+
+  // Deleting the User 
+
+  const handleDeleteUser = async (id) => {
+    if (window.confirm("Are you sure you want to delete this User?")) {
+      try {
+        await service.deleteUser(id);
+        alert("User deleted!");
+        setUserData((prev) => prev.filter((item) => item.$id !== id));
+      } catch (err) {
+        console.error(err);
+        alert("Error deleting User");
+      }
+    }
+  };  
 
   // Deleting the Car 
   const handleDeleteCar = async (id) => {

@@ -27,6 +27,7 @@ import Bmore from './components/Cards/bmore.jsx'
 import CardList from './components/Admin/CardList.jsx';
 import AdminLayout from './components/Admin/AdminLayout.jsx';
 import PaymentRecipt from './components/Booking/PaymentRecipt.jsx'
+import UserData from './components/Admin/UserData.jsx';
 const router= createBrowserRouter([
   {
     path:"/",
@@ -80,6 +81,10 @@ const router= createBrowserRouter([
       {
         path:"/singup",
         element:<Singup />
+      },
+      {
+        path:"/userdata",
+        element:<UserData />
       },
       {
         path:"/FY5675ytrytavytf6gvyvhCXt",

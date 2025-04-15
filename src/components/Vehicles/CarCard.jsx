@@ -74,7 +74,7 @@ const VehicleCard = ({ vehicle, onViewMore }) => {
         return "bg-orange-100 text-orange-800";
       case "COUPE":
         return "bg-slate-100 text-slate-800";
-      case "CONVERTIBLES":
+      case "CONVERTIBLE":
         return "bg-purple-100 text-purple-800";
       case "SPORT":
         return "bg-red-100 text-red-800";

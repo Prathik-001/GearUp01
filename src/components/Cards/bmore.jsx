@@ -63,8 +63,8 @@ const BikeInfo = ({id}) => {
   
 
   return (
-    <div className="max-w-4xl mx-auto p-4 mt">
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
+    // <div className="max-w-4xl mx-auto p-4 mt">
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
         {/* Image Section */}
         <div className="relative h-64 w-full overflow-hidden rounded-2xl shadow-lg">
           <img src={url} alt={`Image of ${bike.vehicleName}`} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"/>
@@ -127,7 +127,7 @@ const BikeInfo = ({id}) => {
           </button>
         </div>
       </div>
-    </div>
+    // </div>
   )
 };
 

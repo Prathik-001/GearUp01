@@ -82,8 +82,8 @@ const ViewAllCar = () => {
 
       {/* 🔍 Modal for Car Info */}
       {selectedCarId && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="relative bg-gray-200 rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-blue-600 bg-opacity-10 flex items-center justify-center z-50">
+          <div className="relative   rounded-xl shadow-2xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <button
               className="absolute top-3 right-3 text-white  text-3xl py-2 px-2 rounded-full z-10 hover:text-red-600"
               onClick={closeCarInfo}>

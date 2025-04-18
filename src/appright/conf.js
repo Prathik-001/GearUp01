@@ -124,7 +124,6 @@ export class Service {
           topBox,
           conditions,
           rating,
-
           userId 
         }
       );
@@ -133,6 +132,53 @@ export class Service {
       return false;
     }
   }
+
+  // User Bookings
+
+  async bookingData(
+    vehicleName,
+    vehicleType,
+    fuelType,
+    rentPrice,
+    totalPrice,
+    startDate,
+    endDate,
+    location,
+    vehicleId,
+    cradID,
+    month,
+    year,
+    bookingStatus,
+    userId
+  ) {
+    try {
+      return await this.database.createDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteBookingId,
+        ID.unique(),
+        {
+          vehicleName,
+          vehicleType,
+          fuelType,
+          rentPrice,
+          totalPrice,
+          startDate,
+          endDate,
+          location,
+          vehicleId,
+          cradID,
+          month,
+          year,
+          bookingStatus,
+          userId,
+        }
+      );
+    } catch (error) {
+      console.log("Appwrite service :: createPost :: user error " + error);
+      return false;
+    }
+  }
+
   // Fetch all users
 
   async getAllUsersData() {
@@ -265,6 +311,18 @@ export class Service {
     }
   }
 
+  async getBookingInfo(id) {
+    try {
+      return await this.database.getDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteBookingId,
+        id
+      );
+    } catch (error) {
+      console.log("Appwrite service :: getBooking :: error " + error);
+      return false;
+    }
+  }
 
   // Delete a user document
   async deleteUser(documentId) {

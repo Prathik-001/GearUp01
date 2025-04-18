@@ -8,6 +8,7 @@ const CarInfo = ({ id }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [fileId, setFileId] = useState(null);
   const [url,seturl]=useState(service.getFilePreiview(fileId))
+  const navigate = useNavigate();
 
   const InfoItem = ({ icon, label, value }) => (
     <div className="flex items-center gap-2">
@@ -18,6 +19,10 @@ const CarInfo = ({ id }) => {
       </div>
     </div>
   );
+
+  const handleBookNow = () => {
+    navigate('/booking', { state: { car } });
+  };
 
   useEffect(() => {
     if (car?.imageId) {
@@ -93,7 +98,10 @@ const CarInfo = ({ id }) => {
               <div className="text-right">
                 <button
                   className="mt-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                  onClick={handleExpandClick}
+                  onClick={() => {
+                    handleExpandClick();
+                    handleBookNow();
+                  }}
                 >
                   Book Now
                 </button>

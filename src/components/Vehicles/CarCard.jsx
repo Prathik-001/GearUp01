@@ -63,7 +63,7 @@ const VehicleCard = ({ vehicle, onViewMore }) => {
   };
 
   const getTypeColor = (type) => {
-    switch (type) {
+    switch (type.toUpperCase()) {
       case "SEDAN":
         return "bg-blue-100 text-blue-800";
       case "SUV":
@@ -82,7 +82,7 @@ const VehicleCard = ({ vehicle, onViewMore }) => {
         return "bg-gray-100 text-gray-800";
     }
   };
-
+  
   return vehicle && vehicle.vehicleName && vehicle.vehicleType ? (
     <div className="max-w-sm w-full">
       <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
@@ -94,10 +94,11 @@ const VehicleCard = ({ vehicle, onViewMore }) => {
           <h2 className="text-lg font-bold text-gray-800 line-clamp-2">{vehicle.vehicleName}</h2>
 
           <div className="flex items-center justify-between">
-            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTypeColor(vehicle.vehicleType)}`}>
-              <FaCar className="inline mr-1" />
-              {vehicle.vehicleType}
-            </span>
+          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTypeColor(vehicle.vehicleType)}`}>
+           <FaCar className="inline mr-1" />
+            {vehicle.vehicleType.toUpperCase()}
+          </span>
+
             {getFuelTypeIcon(vehicle.fuelType)}
           </div>
 

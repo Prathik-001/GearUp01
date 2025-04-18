@@ -8,7 +8,12 @@ const BikeInfo = ({id}) => {
   const [fileId, setFileId] = useState(null);
   const [url,seturl]=useState(service.getFilePreiview(fileId))
   const [isExpanded, setIsExpanded] = useState(false);
-  
+  const navigate = useNavigate();
+
+  const handleBookNow = () => {
+    navigate('/booking', { state: { bike } });
+  };
+
   const handleExpandClick = () => {
     setIsExpanded(!isExpanded);
   };
@@ -96,8 +101,13 @@ const BikeInfo = ({id}) => {
               <div className="text-right">
                 <button
                   className="mt-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                  onClick={handleExpandClick}
+                  onClick={() => {
+                    handleExpandClick();
+                    handleBookNow();
+                  }}
+                  aria-expanded={isExpanded}
                 >
+                  
                   Book Now
                 </button>
               </div>
@@ -123,6 +133,7 @@ const BikeInfo = ({id}) => {
             onClick={handleExpandClick}
             aria-expanded={isExpanded}
           >
+            
             {isExpanded ? "Show Less" : "Show More Details"}
           </button>
         </div>

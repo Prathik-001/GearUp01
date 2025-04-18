@@ -61,17 +61,22 @@ function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+          <Link to="/" className="text-gray-600 hover:text-blue-600">Home</Link>
+          <Link to="/about" className="text-gray-600 hover:text-blue-600">About</Link>
             {!authStatus ? (
               <>
-                <Link to="/login" className="text-gray-600">Login</Link>
-                <Link to="/signup" className="text-gray-600">Signup</Link>
+                <Link to="/login" className="text-gray-600 hover:text-blue-600">Login</Link>
+                <Link to="/singup" className="text-gray-600 hover:text-blue-600">Signup</Link>
               </>
             ) : (
               <>
-                {isAdmin && (
-                  <Link to="/userdash" className="text-gray-600">Dashboard</Link>
-                )}
-                <Link to="/admin" className="text-blue-600">Admin</Link>
+                {isAdmin ? (
+                  <Link to="/admin" className="text-blue-600 hover:text-blue-600">Admin</Link>
+                ):(
+                <Link to="/userdash" className="text-gray-600 hover:text-blue-600">Dashboard</Link>
+                )
+                }
+                
                 <button onClick={logoutUser} className="text-red-600">Logout</button>
               </>
             )}

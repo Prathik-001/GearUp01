@@ -1,9 +1,18 @@
 import { useState } from "react";
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaGoogle,
+  FaApple,
+  FaFacebook,
+} from "react-icons/fa";
 import authService from "../../appright/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authSlice";
+import { motion } from "framer-motion";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -13,7 +22,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Basic validators
   const validateEmail = (email) => /^[^@]+@[^@]+\.[^@]+$/.test(email);
   const validatePassword = (password) => password.length >= 8;
 
@@ -25,7 +33,6 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Validate input
     if (!validateEmail(formData.email) || !validatePassword(formData.password)) {
       setErrors({
         email: !validateEmail(formData.email) ? "Please enter a valid email address" : "",
@@ -38,16 +45,13 @@ const LoginPage = () => {
       await authService.login({ email: formData.email, password: formData.password });
       const userData = await authService.getCurrentUser();
       if (userData) {
-        // Check admin flag: handle both boolean and string "true"
         const isAdmin = userData.prefs?.isAdmin === true || userData.prefs?.isAdmin === "true";
-        console.log("LoginPage - Resolved isAdmin:", isAdmin);
-        dispatch(login({
-          userData,
-          userId: userData.$id,
-          isAdmin,
-        }));
+        dispatch(login({ userData, userId: userData.$id, isAdmin }));
         setIsLoading(false);
-        navigate("/"); // Redirect after login
+        navigate("/");
+        if (isAdmin) {
+          console.log("Admin user logged in: ",true); 
+        }
       }
     } catch (error) {
       setIsLoading(false);
@@ -57,85 +61,102 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center px-4 py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="max-w-md w-full bg-white shadow-xl rounded-2xl p-8 space-y-6"
+      >
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Welcome Back</h2>
-          <p className="text-sm text-gray-600">Sign in to your account</p>
+          <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
+          <p className="text-sm text-gray-500">Login to your account</p>
         </div>
-        {errors.form && <p className="text-red-600 text-center">{errors.form}</p>}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaEnvelope className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className={`appearance-none block w-full pl-10 pr-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-              </div>
-              {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
+
+        {errors.form && <p className="text-center text-red-600">{errors.form}</p>}
+
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email Address
+            </label>
+            <div className="relative mt-1">
+              <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                className={`w-full pl-10 pr-3 py-2 rounded-lg border ${
+                  errors.email ? "border-red-300" : "border-gray-300"
+                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
             </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaLock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  className={`appearance-none block w-full pl-10 pr-10 py-2 border ${errors.password ? 'border-red-300' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <FaEyeSlash className="h-5 w-5 text-gray-400" /> : <FaEye className="h-5 w-5 text-gray-400" />}
-                </button>
-              </div>
-              {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
-            </div>
+            {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-                Forgot Password?
-              </a>
+          {/* Password */}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <div className="relative mt-1">
+              <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                required
+                className={`w-full pl-10 pr-10 py-2 rounded-lg border ${
+                  errors.password ? "border-red-300" : "border-gray-300"
+                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                placeholder="Enter password"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
+            {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
           </div>
-          
+
+          {/* Forgot Password */}
+          <div className="text-right text-sm">
+            <Link to="/forgot-password" className="text-blue-600 hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
+
+          {/* Submit */}
           <button
             type="submit"
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-lg text-white ${isLoading ? 'bg-blue-300' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-colors duration-200`}
+            className={`w-full py-2 rounded-lg text-white font-medium transition duration-200 ${
+              isLoading ? "bg-blue-300 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            }`}
             disabled={isLoading}
           >
             {isLoading ? "Signing in..." : "Sign In"}
           </button>
-          <p className="text-center text-sm text-gray-600">
-            Don't have an account?{" "}
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-              Sign up
-            </a>
-          </p>
         </form>
-      </div>
+
+        {/* Sign Up Link */}
+        <p className="text-center text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link to="/singup" className="font-medium text-blue-600 hover:underline">
+            Sign up
+          </Link>
+        </p>
+      </motion.div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { BsLightningChargeFill, BsFuelPump } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import service from "../../appright/conf.js";
 
-const VehicleCard = ({ vehicle,onViewMore}) => {
+const BikeCard = ({ vehicle,onViewMore}) => {
   const [fileId, setFileId] = useState(vehicle?.imageId);
  const [url,seturl]=useState(service.getFilePreiview(fileId))
 
@@ -120,4 +120,4 @@ const VehicleCard = ({ vehicle,onViewMore}) => {
   ) : null;
 };
 
-export default VehicleCard;
+export default BikeCard;

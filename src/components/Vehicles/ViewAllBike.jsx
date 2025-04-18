@@ -3,6 +3,7 @@ import VehicleCard from "./CarCard";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import service from "../../appright/conf";
 import BikeInfo from "../Cards/bmore";
+import BikeCard from "./BikeCard";
 
 const ViewAllCar = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -73,7 +74,7 @@ const ViewAllCar = () => {
                 key={vehicle.$id}
                 className="bg-white rounded-2xl shadow-md overflow-hidden transform transition-transform hover:scale-95"
               >
-                <VehicleCard vehicle={vehicle} onViewMore={handleViewMore} />
+                <BikeCard vehicle={vehicle} onViewMore={handleViewMore} />
               </div>
             ))}
           </div>

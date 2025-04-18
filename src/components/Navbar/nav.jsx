@@ -71,7 +71,7 @@ function Navbar() {
             ) : (
               <>
                 {isAdmin ? (
-                  <Link to="/admin" className="text-blue-600 hover:text-blue-600">Admin</Link>
+                  <Link to="/FY5675ytrytavytf6gvyvhCXt" className="text-blue-600 hover:text-blue-600">Admin</Link>
                 ):(
                 <Link to="/userdash" className="text-gray-600 hover:text-blue-600">Dashboard</Link>
                 )

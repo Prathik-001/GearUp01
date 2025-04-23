@@ -284,6 +284,33 @@ export class Service {
   //     console.log("Appwrite service :: updatePost :: error " + error);
   //   }
   // }
+//  all bookings
+  async getAllBookingsData() { 
+    try {
+      const allDocs = [];
+      let offset = 0;
+      const limit = 100;
+      let fetched;
+  
+      do {
+        const res = await this.database.listDocuments(
+          conf.appwriteDatabaseId,
+          conf.appwriteBookingId,
+          [Query.limit(limit), Query.offset(offset)]
+        );
+  
+        fetched = res.documents;
+        allDocs.push(...fetched);
+        offset += limit;
+      } while (fetched.length === limit);
+  
+      return allDocs;
+    } catch (error) {
+      console.log("Appwrite service :: getAllBikesData :: error " + error);
+      return false;
+    }
+  }
+
 
   async getCarInfo(id) {
     try {
@@ -365,6 +392,20 @@ async deleteBike(documentId) {
     throw error;
   }
 }
+
+  // Delete a car document
+  async deleteBooking(documentId) {
+    try {
+      return await this.database.deleteDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteBookingId,
+        documentId
+      );
+    } catch (error) {
+      console.log("Appwrite service :: deleteCar :: error " + error);
+      throw error;
+    }
+  }
 
 // search car
 

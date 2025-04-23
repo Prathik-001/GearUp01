@@ -29,6 +29,7 @@ import AdminLayout from './components/Admin/AdminLayout.jsx';
 import PaymentRecipt from './components/Booking/PaymentRecipt.jsx'
 import UserData from './components/Admin/UserData.jsx';
 import Booking from './components/Booking/Booking.jsx';
+import ActiveRental from './components/Userdash/activeRentalCard.jsx'; 
 const router= createBrowserRouter([
   {
     path:"/",
@@ -128,6 +129,10 @@ const router= createBrowserRouter([
       {
         path:"/booking",
         element:<Booking/>
+      },
+      {
+        path:"/activerental",
+        element:<ActiveRental/>
       }
     ],
   },

@@ -260,30 +260,7 @@ export class Service {
       return false;
     }
   }
-  // async getWishlistedCourses(numbers) {
-  //   try {
-  //     return await this.database.listDocuments(
-  //       conf.appwriteDatabaseId,
-  //       conf.appwriteCollectionId,
-  //       [Query.equal("$id", numbers)]
-  //     );
-  //   } catch (error) {
-  //     console.log("Appwrite service :: getData :: error " + error);
-  //     return false;
-  //   }
-  // }
-  // async updateWishlistStatus(id, status) {
-  //   try {
-  //     return await this.database.updateDocument(
-  //       conf.appwriteDatabaseId,
-  //       conf.appwriteCollectionId,
-  //       id,
-  //       { wishlisted: status }
-  //     );
-  //   } catch (error) {
-  //     console.log("Appwrite service :: updatePost :: error " + error);
-  //   }
-  // }
+
 //  all bookings
   async getAllBookingsData() { 
     try {
@@ -393,7 +370,7 @@ async deleteBike(documentId) {
   }
 }
 
-  // Delete a car document
+  // Delete a Booking document
   async deleteBooking(documentId) {
     try {
       return await this.database.deleteDocument(
@@ -402,7 +379,7 @@ async deleteBike(documentId) {
         documentId
       );
     } catch (error) {
-      console.log("Appwrite service :: deleteCar :: error " + error);
+      console.log("Appwrite service :: deleteBooking :: error " + error);
       throw error;
     }
   }

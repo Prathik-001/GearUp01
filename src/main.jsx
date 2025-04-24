@@ -89,7 +89,7 @@ const router= createBrowserRouter([
         element:<UserData />
       },
       {
-        path:"/",
+        path:"/FY5675ytrytavytf6gvyvhCXt",
         element:<AdminLayout/>,
         children:[
           { 

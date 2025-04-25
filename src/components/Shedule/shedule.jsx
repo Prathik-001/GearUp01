@@ -1,168 +1,119 @@
-import React, { useState ,li } from "react";
+import React, { useState } from "react";
 import { FaCar, FaMotorcycle } from "react-icons/fa";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
 const VehicleRentalSchedule = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [dropoffLocation, setDropoffLocation] = useState("");
-  const [pickupDateTime, setPickupDateTime] = useState(null);
-  const [dropoffDateTime, setDropoffDateTime] = useState(null);
-  const [errors, setErrors] = useState({});
-
-  const locations = [
-    "New York City",
-    "Los Angeles",
-    "Chicago",
-    "Houston",
-    "Phoenix",
-    "Philadelphia"
-  ];
-
-  const validateForm = () => {
-    const newErrors = {};
-    if (!selectedVehicle) newErrors.vehicle = "Please select a vehicle type";
-    if (!pickupLocation) newErrors.pickup = "Please select pickup location";
-    if (!dropoffLocation) newErrors.dropoff = "Please select dropoff location";
-    if (!pickupDateTime) newErrors.pickupTime = "Please select pickup date and time";
-    if (!dropoffDateTime) newErrors.dropoffTime = "Please select dropoff date and time";
-    if (pickupDateTime && dropoffDateTime && pickupDateTime >= dropoffDateTime) {
-      newErrors.dateRange = "Dropoff time must be after pickup time";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Form submitted successfully");
-    }
-  };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 justify-center items-center pt-40" >
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">Search your next ride</h1>
+    <div className="relative min-h-screen bg-gray-100 overflow-hidden">
+      {/* Full Screen Background */}
+      <div
+        className="absolute inset-0 z-0 "
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <button
-            onClick={() => setSelectedVehicle("car")}
-            className={`relative overflow-hidden rounded-xl h-64 transition-all duration-300 ${selectedVehicle === "car" ? "ring-4 ring-blue-500" : "hover:shadow-xl"}`}
-            aria-label="Rent a Car"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1550355291-bbee04a92027"
-              alt="Luxury Car"
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-opacity hover:bg-opacity-50">
-              <div className="text-center">
-                <FaCar className="text-white text-4xl mx-auto mb-2" />
-                <h2 className="text-white text-xl font-semibold">Rent a Car</h2>
+      {/* Main Content */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-6xl mx-auto">
+          <div className="bg-white bg-opacity-60 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
+            <div className="p-6 sm:p-8 md:p-10 lg:p-12">
+              {/* Header */}
+              <div className="text-center mb-8 md:mb-10">
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                  Find Your Perfect Ride
+                </h1>
+                <p className="text-base sm:text-lg text-gray-600">
+                  Choose between our premium selection of vehicles
+                </p>
               </div>
-            </div>
-          </button>
 
-          <button
-            onClick={() => setSelectedVehicle("bike")}
-            className={`relative overflow-hidden rounded-xl h-64 transition-all duration-300 ${selectedVehicle === "bike" ? "ring-4 ring-blue-500" : "hover:shadow-xl"}`}
-            aria-label="Rent a Bike"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1558981806-ec527fa84c39"
-              alt="Sport Motorcycle"
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-opacity hover:bg-opacity-50">
-              <div className="text-center">
-                <FaMotorcycle className="text-white text-4xl mx-auto mb-2" />
-                <h2 className="text-white text-xl font-semibold">Rent a Bike</h2>
+              {/* Vehicle Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                {/* Car Card */}
+                <Link
+                  to="/car"
+                  aria-label="Rent a car"
+                  className="group relative block overflow-hidden rounded-xl transition-all duration-300 transform hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-xl md:hover:shadow-2xl"
+                  onMouseEnter={() => setSelectedVehicle("car")}
+                  onMouseLeave={() => setSelectedVehicle(null)}
+                  onTouchStart={() => setSelectedVehicle("car")}
+                  onTouchEnd={() => setSelectedVehicle(null)}
+                  onClick={() => setSelectedVehicle("car")}
+                >
+                  <div className="w-full h-64 sm:h-72 md:h-80">
+                    <img
+                      src="https://images.unsplash.com/photo-1550355291-bbee04a92027"
+                      alt="Luxury Car"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end justify-center transition-all duration-300 ${
+                      selectedVehicle === "car" ? "opacity-90" : "opacity-80"
+                    }`}
+                  >
+                    <div className="text-center p-4 sm:p-6 transform transition-all duration-300 group-hover:-translate-y-2">
+                      <FaCar className="text-white text-4xl sm:text-5xl mx-auto mb-3 sm:mb-4 group-hover:text-blue-400 transition-all duration-300" />
+                      <h2 className="text-white text-xl sm:text-2xl font-bold mb-1 sm:mb-2">
+                        Rent a Car
+                      </h2>
+                      <p className="text-gray-300 text-sm sm:text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        Explore our luxury car collection
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* Bike Card */}
+                <Link
+                  to="/bike"
+                  aria-label="Rent a bike"
+                  className="group relative block overflow-hidden rounded-xl transition-all duration-300 transform hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-xl md:hover:shadow-2xl"
+                  onMouseEnter={() => setSelectedVehicle("bike")}
+                  onMouseLeave={() => setSelectedVehicle(null)}
+                  onTouchStart={() => setSelectedVehicle("bike")}
+                  onTouchEnd={() => setSelectedVehicle(null)}
+                  onClick={() => setSelectedVehicle("bike")}
+                >
+                  <div className="w-full h-64 sm:h-72 md:h-80">
+                    <img
+                      src="https://images.unsplash.com/photo-1558981806-ec527fa84c39"
+                      alt="Sport Motorcycle"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end justify-center transition-all duration-300 ${
+                      selectedVehicle === "bike" ? "opacity-90" : "opacity-80"
+                    }`}
+                  >
+                    <div className="text-center p-4 sm:p-6 transform transition-all duration-300 group-hover:-translate-y-2">
+                      <FaMotorcycle className="text-white text-4xl sm:text-5xl mx-auto mb-3 sm:mb-4 group-hover:text-blue-400 transition-all duration-300" />
+                      <h2 className="text-white text-xl sm:text-2xl font-bold mb-1 sm:mb-2">
+                        Rent a Bike
+                      </h2>
+                      <p className="text-gray-300 text-sm sm:text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        Experience the thrill of the ride
+                      </p>
+                    </div>
+                  </div>
+                </Link>
               </div>
-            </div>
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="pickup" className="block text-sm font-medium text-gray-700">Pickup Location</label>
-              <select
-                id="pickup"
-                value={pickupLocation}
-                onChange={(e) => setPickupLocation(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option value="">Select Pickup Location</option>
-                {locations.map((location) => (
-                  <option key={location} value={location}>{location}</option>
-                ))}
-              </select>
-              {errors.pickup && <p className="mt-1 text-sm text-red-600">{errors.pickup}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="dropoff" className="block text-sm font-medium text-gray-700">Dropoff Location</label>
-              <select
-                id="dropoff"
-                value={dropoffLocation}
-                onChange={(e) => setDropoffLocation(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option value="">Select Dropoff Location</option>
-                {locations.map((location) => (
-                  <option key={location} value={location}>{location}</option>
-                ))}
-              </select>
-              {errors.dropoff && <p className="mt-1 text-sm text-red-600">{errors.dropoff}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 ">Pickup Date & Time</label>
-              <DatePicker
-                selected={pickupDateTime}
-                onChange={setPickupDateTime}
-                showTimeSelect
-                dateFormat="MMMM d, yyyy h:mm aa"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 mb-5"
-                placeholderText="Select date and time"
-                minDate={new Date()}
-              />
-              {errors.pickupTime && <p className="mt-1 text-sm text-red-600">{errors.pickupTime}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Dropoff Date & Time</label>
-              <DatePicker
-                selected={dropoffDateTime}
-                onChange={setDropoffDateTime}
-                showTimeSelect
-                dateFormat="MMMM d, yyyy h:mm aa"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 mb-5"
-                placeholderText="Select date and time"
-                minDate={pickupDateTime || new Date()}
-              />
-              {errors.dropoffTime && <p className="mt-1 text-sm text-red-600">{errors.dropoffTime}</p>}
             </div>
           </div>
-
-          {errors.dateRange && (
-            <p className="text-sm text-red-600">{errors.dateRange}</p>
-          )}
-
-          <Link to={"card"}>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300">
-            Schedule Rental
-          </button>
-          </Link>
-        </form>
+        </div>
       </div>
     </div>
   );

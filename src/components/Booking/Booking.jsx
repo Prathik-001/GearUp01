@@ -19,12 +19,11 @@ const locations = [
 const Booking = () => {
   const locationRouter = useLocation();
   const selectedBike = locationRouter.state?.bike;
-  const selectedCar=locationRouter.state?.car;
+  const selectedCar = locationRouter.state?.car;
   const selectedVehicle = selectedCar || selectedBike;
- // Vehicle passed via router
   const navigate = useNavigate();
-  const userId = useSelector((state) => state.auth.userId)
-  const vehicleId= selectedVehicle?.$id;
+  const userId = useSelector((state) => state.auth.userId);
+  const vehicleId = selectedVehicle?.$id;
 
   const [vehicleData, setVehicleData] = useState({
     vehicleName: '',
@@ -47,7 +46,6 @@ const Booking = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-
 
   useEffect(() => {
     if (selectedVehicle) {
@@ -86,10 +84,16 @@ const Booking = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { fromDate, toDate, location, paymentMethod, cardNumber, expiryMonth, expiryYear } = bookingData;
+    const { fromDate, toDate, location, paymentMethod, cardNumber, expiryMonth, expiryYear, cvv } = bookingData;
 
-    if (!fromDate || !toDate || !location || !paymentMethod || !cardNumber || !expiryMonth || !expiryYear) {
+    if (!fromDate || !toDate || !location || !paymentMethod) {
       alert('Please fill all fields');
+      return;
+    }
+
+    // Check if payment is not cash, and if card details are missing
+    if ((paymentMethod === 'credit' || paymentMethod === 'debit') && (!cardNumber || !expiryMonth || !expiryYear || !cvv)) {
+      alert('Please complete your card details.');
       return;
     }
 
@@ -105,9 +109,9 @@ const Booking = () => {
         toDate,
         location,
         vehicleId,
-        cardNumber,
-        expiryMonth,
-        expiryYear,
+        cardNumber,    // Should be empty for cash
+        expiryMonth,   // Should be empty for cash
+        expiryYear,    // Should be empty for cash
         "pending",
         userId
       );
@@ -115,17 +119,17 @@ const Booking = () => {
       if (response) {
         console.log("Booking successful", response);
         setTimeout(() => {
-            navigate("/receipt", {
-              state: {
-                vehicleName: vehicleData.vehicleName,
-                fromDate: bookingData.fromDate,
-                toDate: bookingData.toDate,
-                location: bookingData.location,
-                totalAmount: totalPrice,
-              },
-            });
-          }, 500);
-        console.log("Booking successful", response);
+          navigate("/receipt", {
+            state: {
+              vehicleName: vehicleData.vehicleName,
+              fromDate: bookingData.fromDate,
+              toDate: bookingData.toDate,
+              location: bookingData.location,
+              totalAmount: totalPrice,
+              paymentMethod: bookingData.paymentMethod, // Add paymentMethod to receipt
+            },
+          });
+        }, 500);
       }
     } catch (error) {
       console.error("Booking error", error);
@@ -143,7 +147,7 @@ const Booking = () => {
       }}>
       <div className="max-w-3xl mx-auto bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-8">
         <button onClick={() => navigate(-1)} className="mb-6 text-blue-600 hover:underline font-medium">← Back</button>
-        <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center"> Booking</h1>
+        <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">Booking</h1>
 
         {/* Selected Vehicle Display */}
         <div className="bg-blue-50 p-6 rounded-xl mb-8">
@@ -188,7 +192,6 @@ const Booking = () => {
                     className="w-full border rounded-lg p-3"
                     required
                 />
-
             </div>
 
             <div>
@@ -203,7 +206,7 @@ const Booking = () => {
                 required
                 />
             </div>
-        </div>
+          </div>
 
           {/* Location Picker */}
           <div>
@@ -307,40 +310,17 @@ const Booking = () => {
             )}
           </div>
 
-          {/* Total Price */}
-          {totalPrice > 0 && (
-            <div className="bg-blue-50 p-6 rounded-xl">
-              <p className="text-2xl font-bold text-blue-900 text-center">
-                Total Price: ₹{totalPrice.toLocaleString()}
-              </p>
-              <p className="text-center text-sm text-blue-600 mt-1">
-                for {Math.ceil((new Date(bookingData.toDate).getTime() - new Date(bookingData.fromDate).getTime()) / (1000 * 60 * 60 * 24))} days
-              </p>
-            </div>
-          )}
-
-          <button type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold">
-            {loading ? "Processing..." : "Confirm Booking"}
-          </button>
-        </form>
-
-        {/* Confirmation Modal */}
-        {showConfirmation && (
-          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-xl text-center shadow-xl">
-              <Check className="text-green-600 mb-4 mx-auto" size={48} />
-              <h3 className="text-2xl font-bold mb-2">Booking Confirmed!</h3>
-              <p className="mb-4 text-gray-600">
-                {vehicleData.vehicleName} booked from {bookingData.fromDate} to {bookingData.toDate}
-              </p>
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-lg"
-                onClick={() => setShowConfirmation(false)}>
-                Close
-              </button>
-            </div>
+          {/* Submit Button */}
+          <div className="flex justify-center mt-6">
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg focus:outline-none hover:bg-blue-700 disabled:bg-gray-400"
+            >
+              {loading ? 'Booking...' : 'Book Now'}
+            </button>
           </div>
-        )}
+        </form>
       </div>
     </div>
   );

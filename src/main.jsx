@@ -30,6 +30,7 @@ import PaymentRecipt from './components/Booking/PaymentRecipt.jsx'
 import UserData from './components/Admin/UserData.jsx';
 import Booking from './components/Booking/Booking.jsx';
 import ActiveRental from './components/Userdash/activeRentalCard.jsx'; 
+import { ToastContainer } from 'react-toastify';
 const router= createBrowserRouter([
   {
     path:"/",
@@ -140,6 +141,7 @@ const router= createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
+      <ToastContainer/>
     <RouterProvider router={router} />
     </Provider>
   </StrictMode>,

@@ -4,6 +4,8 @@ import { format } from "date-fns";
 import service from "../../appright/conf";
 import { Account } from "appwrite";
 import ActiveRental from "./activeRentalCard";
+import Swal from "sweetalert2";
+
 
 const CarRentalDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -32,15 +34,34 @@ const CarRentalDashboard = () => {
     loadUserBookings();
   }, []);
 
-  const handleDeleteUser = async (id) => {
-    if (window.confirm("Are you sure you want to delete this Booking?")) {
+  const handleDeleteBooking = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This Booking will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6", // Blue button
+      cancelButtonColor: "#d33",     // Red cancel button
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+  
+    if (result.isConfirmed) {
       try {
         await service.deleteBooking(id);
-        alert("Booking deleted!");
+        await Swal.fire(
+          "Deleted!",
+          "The Booking has been deleted successfully. Refund will be processed with in 24 hours.",
+          "success"
+        );
         setBooking((prev) => prev.filter((item) => item.$id !== id));
       } catch (err) {
         console.error(err);
-        alert("Error deleting booking. Please try again.");
+        Swal.fire(
+          "Error!",
+          "There was a problem deleting the User.",
+          "error"
+        );
       }
     }
   };
@@ -153,7 +174,7 @@ const CarRentalDashboard = () => {
                     key={u.$id}
                     className="mt-3 rounded-lg shadow-md hover:shadow-lg"
                   >
-                    <ActiveRental rental={u} onDelete={handleDeleteUser} />
+                    <ActiveRental rental={u} onDelete={handleDeleteBooking} />
                   </div>
                 ))
               )}
@@ -175,7 +196,7 @@ const CarRentalDashboard = () => {
                     key={u.$id}
                     className="mt-3 rounded-lg shadow-md hover:shadow-lg"
                   >
-                    <ActiveRental rental={u} onDelete={handleDeleteUser} />
+                    <ActiveRental rental={u} onDelete={handleDeleteBooking} />
                   </div>
                 ))
               )}

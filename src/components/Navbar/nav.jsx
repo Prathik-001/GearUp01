@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { FiMenu, FiX } from "react-icons/fi";
 import authService from "../../appright/auth";
 import { logout as authLogout } from "../../store/authSlice";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,16 +15,38 @@ function Navbar() {
   const navigate = useNavigate();
 
   const logoutUser = async () => {
-    try {
-      const res = await authService.logout();
-      if (res) {
-        dispatch(authLogout());
-        navigate("/");
+    // Show SweetAlert2 confirmation dialog
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6', // Blue button
+      cancelButtonColor: '#d33', // Red cancel button
+      confirmButtonText: 'Yes, log out!',
+      cancelButtonText: 'Cancel',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const res = await authService.logout();
+        if (res) {
+          dispatch(authLogout());
+                toast.success("Logout Successful.", {
+                    position: "top-center",
+                    className: "bg-red-600 text-white font-bold rounded-lg shadow-lg",
+                    bodyClassName: "text-sm",
+                    progressClassName: "bg-white",
+                    theme: "light",
+                  });
+          navigate("/");
+        }
+      } catch (err) {
+        console.error(err.message);
       }
-    } catch (err) {
-      console.error(err.message);
     }
   };
+
 
   return (
     <header className="bg-white shadow-md w-full z-50">

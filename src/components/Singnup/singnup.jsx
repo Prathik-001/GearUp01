@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authSlice"
 import service from "../../appright/conf";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -138,11 +139,25 @@ const Signup = () => {
         dispatch(login({ userData, personalData }));
         console.log(personalData);
         setIsLoading(false);
+        toast.success(`Welcome, ${formData.username}! Your account has created successfully.`, {
+          position: "top-center",
+          className: "bg-blue-600 text-white font-bold rounded-lg shadow-lg",
+          bodyClassName: "text-sm",
+          progressClassName: "bg-white",
+          theme: "light",
+          });
         navigate("/");
       }
     } catch (error) {
       console.error("Signup failed:", error);
       setIsLoading(false);
+      toast.error("Login unsuccessful! User already exits.", {
+          position: "top-center",
+          className: "bg-red-600 text-white font-bold rounded-lg shadow-lg",
+          bodyClassName: "text-sm",
+          progressClassName: "bg-white",
+          theme: "light",
+        });
     }
   };
 

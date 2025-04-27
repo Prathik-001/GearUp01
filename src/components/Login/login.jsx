@@ -13,6 +13,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authSlice";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -48,14 +49,40 @@ const LoginPage = () => {
         const isAdmin = userData.prefs?.isAdmin === true || userData.prefs?.isAdmin === "true";
         dispatch(login({ userData, userId: userData.$id, isAdmin }));
         setIsLoading(false);
-        navigate("/");
+        console.log(userData);
+        
         if (isAdmin) {
-          console.log("Admin user logged in: ",true); 
+          console.log("Admin user logged in: ",true);
+          toast("Admin Login Successful!", { // <-- just toast(), not toast.success()
+            position: "top-center",
+            className: "bg-blue-600 text-white font-bold rounded-lg shadow-lg",
+            bodyClassName: "text-sm",
+            progressClassName: "bg-white",
+            theme: "light",
+          });
+          
         }
+        else{
+          toast.success(`Welcome back ${userData.name}`, {
+            position: "top-center",
+            className: "bg-blue-600 text-white font-bold rounded-lg shadow-lg",
+            bodyClassName: "text-sm",
+            progressClassName: "bg-white",
+            theme: "light",
+          });
+        }
+          navigate("/");
       }
     } catch (error) {
       setIsLoading(false);
       setErrors({ form: "Invalid email or password. Please try again." });
+      toast.error("Login unsuccessful! Please try again.", {
+          position: "top-center",
+          className: "bg-red-600 text-white font-bold rounded-lg shadow-lg",
+          bodyClassName: "text-sm",
+          progressClassName: "bg-white",
+          theme: "light",
+        });
       console.error("Login error:", error);
     }
   };

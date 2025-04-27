@@ -7,6 +7,8 @@ import service from "../../appright/conf";
 import VehicleCardList from './CardList';
 import UserData from "./UserData";
 import VehicleRentalBookingRow from "./AdminBooking";
+import { toast } from "react-toastify";
+import Swal from 'sweetalert2';
 
 const AdminPanel = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -67,22 +69,42 @@ const AdminPanel = () => {
               ₹{booking.reduce((acc, b) => acc + b.totalPrice, 0)}
             </h3>
           </div>
-          <FiDollarSign className="text-3xl text-yellow-500" />
+          <span className="text-3xl text-yellow-500">₹</span> {/* Directly using the ₹ symbol */}
         </div>
       </div>
     </div>
   );
 
   // User Section
+
   const handleDeleteUser = async (id) => {
-    if (window.confirm("Are you sure you want to delete this User?")) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This User will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6", // Blue button
+      cancelButtonColor: "#d33",     // Red cancel button
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+  
+    if (result.isConfirmed) {
       try {
         await service.deleteUser(id);
-        alert("User deleted!");
+        await Swal.fire(
+          "Deleted!",
+          "The User has been deleted successfully.",
+          "success"
+        );
         setUserData((prev) => prev.filter((item) => item.$id !== id));
       } catch (err) {
         console.error(err);
-        alert("Error deleting User");
+        Swal.fire(
+          "Error!",
+          "There was a problem deleting the User.",
+          "error"
+        );
       }
     }
   };
@@ -108,14 +130,33 @@ const AdminPanel = () => {
 
   // Bike Section
   const handleDeleteBike = async (id) => {
-    if (window.confirm("Are you sure you want to delete this bike?")) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This Bike will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6", // Blue button
+      cancelButtonColor: "#d33",     // Red cancel button
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+  
+    if (result.isConfirmed) {
       try {
         await service.deleteBike(id);
-        alert("Bike deleted!");
+        await Swal.fire(
+          "Deleted!",
+          "The bike has been deleted successfully.",
+          "success"
+        );
         setBikeVehicles((prev) => prev.filter((item) => item.$id !== id));
       } catch (err) {
         console.error(err);
-        alert("Error deleting bike");
+        Swal.fire(
+          "Error!",
+          "There was a problem deleting the car.",
+          "error"
+        );
       }
     }
   };
@@ -144,19 +185,40 @@ const AdminPanel = () => {
     </div>
   );
 
-  // Car Section
+  // Car Section  
+
   const handleDeleteCar = async (id) => {
-    if (window.confirm("Are you sure you want to delete this car?")) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This car will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6", // Blue button
+      cancelButtonColor: "#d33",     // Red cancel button
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+  
+    if (result.isConfirmed) {
       try {
         await service.deleteCar(id);
-        alert("Car deleted!");
+        await Swal.fire(
+          "Deleted!",
+          "The car has been deleted successfully.",
+          "success"
+        );
         setCarVehicles((prev) => prev.filter((item) => item.$id !== id));
       } catch (err) {
         console.error(err);
-        alert("Error deleting car");
+        Swal.fire(
+          "Error!",
+          "There was a problem deleting the car.",
+          "error"
+        );
       }
     }
   };
+  
 
   const CarSection = () => (
     <div>
@@ -184,18 +246,39 @@ const AdminPanel = () => {
 
   // Bookings Section
 
+
   const handleDeleteBooking = async (id) => {
-    if (window.confirm("Are you sure you want to delete this Booking?")) {
-      try {
-        await service.deleteBooking(id);
-        alert("booking deleted!");
-        setBooking((prev) => prev.filter((item) => item.$id !== id));
-      } catch (err) {
-        console.error(err);
-        alert("Error deleting booking");
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this booking!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (result.isConfirmed) {
+        try {
+          await service.deleteBooking(id);
+          Swal.fire(
+            "Deleted!",
+            "Your booking has been deleted.",
+            "success"
+          );
+          setBooking((prev) => prev.filter((item) => item.$id !== id));
+        } catch (err) {
+          console.error(err);
+          Swal.fire(
+            "Error!",
+            "There was a problem deleting the booking.",
+            "error"
+          );
+        }
       }
-    }
-  };
+    };
+
+  
   const BookingsTable = ({ booking, users, handleDeleteBooking }) => (
     <div className="w-full bg-white rounded-lg shadow-md overflow-hidden">
       <div className="overflow-x-auto">

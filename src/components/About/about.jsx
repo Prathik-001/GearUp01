@@ -1,31 +1,9 @@
 import React from 'react';
 import { FaCar, FaMotorcycle, FaMoneyBillWave, FaCalendarAlt, FaTools, FaClock } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { Link } from 'react-router-dom';
 
 export const about = () => {
-  const team = [
-    {
-      name: "Prathik",
-      role: "Founder & CEO",
-      image: "1.jpg",
-    },
-    {
-      name: "Harsha",
-      role: "Operations Manager",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2",
-    },
-    {
-      name: "Ashrith",
-      role: "Fleet Manager",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
-    },
-    {
-      name: "Roshan",
-      role: "Fleet Manager",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
-    }
-
-  ];
 
   const features = [
     {
@@ -156,42 +134,17 @@ export const about = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-20 bg-gray-100">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">Meet Our Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="bg-white rounded-lg overflow-hidden shadow-lg"
-              >
-                <img 
-                  src={member.image} 
-                  alt={member.name}
-                  className="w-full h-64 object-cover"
-                />
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 ">{member.name}</h3>
-                  <p className="text-gray-600">{member.role}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Contact CTA */}
       <section className="py-20 bg-blue-600 text-white">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-8">Ready to Hit the Road?</h2>
           <p className="text-xl mb-8">Browse our collection and find your perfect ride today.</p>
+          <Link to={"/shedule"}>
           <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300">
             View Our Fleet
           </button>
+          </Link>
         </div>
       </section>
     </div>

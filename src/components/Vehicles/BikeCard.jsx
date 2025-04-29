@@ -5,12 +5,14 @@ import { Link } from "react-router-dom";
 import service from "../../appright/conf.js";
 
 const BikeCard = ({ vehicle,onViewMore}) => {
-  const [fileId, setFileId] = useState(vehicle?.imageId);
+const [fileId, setFileId] = useState(vehicle?.imageId);
  const [url,seturl]=useState(service.getFilePreiview(fileId))
+ const [status,setStatus]=useState(false)
 
  useEffect(()=>{
   seturl(url.replace("preview","view")+"&mode=admin")
  },[])
+ 
 
   const getFuelTypeIcon = (fuelType) => {
     switch (fuelType) {

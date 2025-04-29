@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaTrash, FaGasPump, FaCar, FaEdit } from "react-icons/fa";
 import { MdElectricCar } from "react-icons/md";
 
-const VehicleCardList = ({ vehicle, onDelete }) => {
+const BikeCardList = ({ vehicle, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleModify = (id) => {
@@ -72,4 +72,4 @@ const VehicleCardList = ({ vehicle, onDelete }) => {
   );
 };
 
-export default VehicleCardList;
+export default BikeCardList;

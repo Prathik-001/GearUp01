@@ -25,14 +25,14 @@ const VehicleRentalSchedule = () => {
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-6xl mx-auto">
-          <div className="bg-white bg-opacity-60 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
+          <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
             <div className="p-6 sm:p-8 md:p-10 lg:p-12">
               {/* Header */}
               <div className="text-center mb-8 md:mb-10">
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
                   Find Your Perfect Ride
                 </h1>
-                <p className="text-base sm:text-lg text-gray-600">
+                <p className="text-base sm:text-lg text-gray-400 ">
                   Choose between our premium selection of vehicles
                 </p>
               </div>

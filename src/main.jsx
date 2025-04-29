@@ -24,13 +24,14 @@ import CarInfo from "./components/Cards/more.jsx"
 import BikeInfo from "./components/Cards/bmore.jsx"
 import Badd from './components/Admin/Badd.jsx';
 import Bmore from './components/Cards/bmore.jsx'
-import CardList from './components/Admin/CardList.jsx';
 import AdminLayout from './components/Admin/AdminLayout.jsx';
 import PaymentRecipt from './components/Booking/PaymentRecipt.jsx'
 import UserData from './components/Admin/UserData.jsx';
 import Booking from './components/Booking/Booking.jsx';
+import BikeCardList from './components/Admin/BikeCardList.jsx';
 import ActiveRental from './components/Userdash/activeRentalCard.jsx'; 
 import { ToastContainer } from 'react-toastify';
+import CarCardList from './components/Admin/CarCardList.jsx';
 const router= createBrowserRouter([
   {
     path:"/",
@@ -107,7 +108,11 @@ const router= createBrowserRouter([
           },
           {
             path:"clist",
-            element:<CardList />,
+            element:<CarCardList />,
+          },
+          {
+            path:"blist",
+            element:<BikeCardList />,
           },
         ]
       },

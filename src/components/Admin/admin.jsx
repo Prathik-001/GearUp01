@@ -4,7 +4,8 @@ import { FaCar, FaMotorcycle, FaUser } from "react-icons/fa";
 import { MdDirectionsBike, MdDirectionsCar } from "react-icons/md";
 import { Link } from "react-router-dom";
 import service from "../../appright/conf";
-import VehicleCardList from './CardList';
+import CarCardList from "./CarCardList";
+import BikeCardList from "./BikeCardList";
 import UserData from "./UserData";
 import VehicleRentalBookingRow from "./AdminBooking";
 import { toast } from "react-toastify";
@@ -176,7 +177,7 @@ const AdminPanel = () => {
           <div className="space-y-1">
             {bike.map((vehicle) => (
               <div key={vehicle.$id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 hover:scale-100">
-                <VehicleCardList vehicle={vehicle} onDelete={handleDeleteBike} />
+                <BikeCardList  vehicle={vehicle} onDelete={handleDeleteBike} />
               </div>
             ))}
           </div>
@@ -235,7 +236,7 @@ const AdminPanel = () => {
           <div className="space-y-1">
             {car.map((vehicle) => (
               <div key={vehicle.$id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 hover:scale-100">
-                <VehicleCardList vehicle={vehicle} onDelete={handleDeleteCar} />
+                <CarCardList vehicle={vehicle} onDelete={handleDeleteCar} />
               </div>
             ))}
           </div>

@@ -27,6 +27,25 @@ const HomePage = () => {
       image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
       quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
     },
+    {
+      name: "Avin",
+      vehicle: "Fz",
+      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
+      quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
+    },
+    {
+      name: "Harsha",
+      vehicle: "Fz",
+      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
+      quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
+    },
+    {
+      name: "Ashrith",
+      vehicle: "Fz",
+      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
+      quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
+    },
+    
   ];
 
 

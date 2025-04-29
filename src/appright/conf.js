@@ -54,7 +54,8 @@ export class Service {
     numberOfDoors,
     conditions,
     rating,
-    userId
+    userId,
+    status
   ) {
     try {
       return await this.database.createDocument(
@@ -80,6 +81,7 @@ export class Service {
           rating,
           imageId,
           userId,
+          status
         }
       );
     } catch (error) {
@@ -103,7 +105,8 @@ export class Service {
     topBox,
     conditions,
     rating,
-    userId
+    userId,
+    status
   ) {
     try {
       return await this.database.createDocument(
@@ -124,11 +127,42 @@ export class Service {
           topBox,
           conditions,
           rating,
-          userId 
+          userId,
+          status,
         }
       );
     } catch (error) {
       console.log("Appwrite service :: uploadBikeData :: error", error);
+      return false;
+    }
+  }
+
+  //car update
+  async updateCarData(documentId, updatedData) {
+    try {
+      return await this.database.updateDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollectionId,
+        documentId,
+        updatedData
+      );
+    } catch (error) {
+      console.log("Appwrite service :: updateCarData :: error " + error);
+      return false;
+    }
+  }
+  
+  //bike update
+  async updateBikeData(documentId, updatedData) {
+    try {
+      return await this.database.updateDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteBikeCollectionId,
+        documentId,
+        updatedData
+      );
+    } catch (error) {
+      console.log("Appwrite service :: updateBikeData :: error " + error);
       return false;
     }
   }

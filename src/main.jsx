@@ -32,6 +32,7 @@ import BikeCardList from './components/Admin/BikeCardList.jsx';
 import ActiveRental from './components/Userdash/activeRentalCard.jsx'; 
 import { ToastContainer } from 'react-toastify';
 import CarCardList from './components/Admin/CarCardList.jsx';
+import ProtectedRoute from './ProtectedRoutes.jsx';
 const router= createBrowserRouter([
   {
     path:"/",
@@ -55,15 +56,24 @@ const router= createBrowserRouter([
       },
       {
         path:"/shedule",
-        element:<Shedule />
+        element:
+        <ProtectedRoute>
+        <Shedule />
+        </ProtectedRoute>
       },
       {
         path:"/car",
-        element:<ViewAllCars />
+        element:
+        <ProtectedRoute>
+          <ViewAllCars />
+        </ProtectedRoute>
       },
       {
         path:"/bike",
-        element:<ViewAllBikes />
+        element:
+        <ProtectedRoute>
+          <ViewAllBikes />
+        </ProtectedRoute>
       },
       {
         path:"/car-info/:id",
@@ -122,7 +132,10 @@ const router= createBrowserRouter([
       },
       {
         path:"/userdash",
-        element:<Userdash />
+        element:
+        <ProtectedRoute>
+        <Userdash />
+        </ProtectedRoute>
       },
       {
         path:"/about",

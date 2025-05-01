@@ -48,16 +48,12 @@ const CarCardList = ({ vehicle, onDelete }) => {
             <span className="inline-block  px-3 py-1 text-sm font-semibold text-gray-700 bg-gray-100 rounded-full">
               {vehicle.vehicleType}
             </span>
+            <span className="text-lg font-bold text-gray-900">
+            {vehicle.mileage} km/l
+            </span>
           </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => handleModify(vehicle.id)}
-            className="text-blue-500 hover:text-blue-700 transition-colors duration-200 p-2"
-            aria-label="Modify vehicle"
-          >
-            <FaEdit size={18} />
-          </button>
+        <div className="flex gap=1">
           <button
             onClick={handleConfirmDelete}
             className="text-red-500 hover:text-red-700 transition-colors duration-200 p-2"

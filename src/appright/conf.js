@@ -137,35 +137,6 @@ export class Service {
     }
   }
 
-  //car update
-  async updateCarData(documentId, updatedData) {
-    try {
-      return await this.database.updateDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
-        documentId,
-        updatedData
-      );
-    } catch (error) {
-      console.log("Appwrite service :: updateCarData :: error " + error);
-      return false;
-    }
-  }
-  
-  //bike update
-  async updateBikeData(documentId, updatedData) {
-    try {
-      return await this.database.updateDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteBikeCollectionId,
-        documentId,
-        updatedData
-      );
-    } catch (error) {
-      console.log("Appwrite service :: updateBikeData :: error " + error);
-      return false;
-    }
-  }
 
   // User Bookings
 
@@ -213,7 +184,36 @@ export class Service {
     }
   }
 
-  // Fetch all users
+  //HELPLINE data
+  async  helpline(
+    FullName,
+    Email,
+    phone,
+    subject,
+    message,
+    userId
+  ) {
+    try {
+      return await this.database.createDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteHelplineId,
+        ID.unique(),
+        {
+          FullName,
+          Email,
+          phone,
+          subject,
+          message,
+          userId,
+        }
+      );
+    } catch (error) {
+      console.log("Appwrite service :: createPost :: HelpLine " + error);
+      return false;
+    }
+  } 
+
+  // Fetch all users (with pagination)
 
   async getAllUsersData() {
     try {
@@ -321,6 +321,32 @@ export class Service {
       return false;
     }
   }
+  // Fetch all helpline  (with pagination)
+  async getAllHelpline() {
+    try {
+      const allDocs = [];
+      let offset = 0;
+      const limit = 100;
+      let fetched;
+  
+      do {
+        const res = await this.database.listDocuments(
+          conf.appwriteDatabaseId,
+          conf.appwriteHelplineId,
+          [Query.limit(limit), Query.offset(offset)]
+        );
+  
+        fetched = res.documents;
+        allDocs.push(...fetched);
+        offset += limit;
+      } while (fetched.length === limit);
+  
+      return allDocs;
+    } catch (error) {
+      console.log("Appwrite service :: getAllHelpline :: error " + error);
+      return false;
+    }
+  }
 
 
   async getCarInfo(id) {
@@ -359,6 +385,20 @@ export class Service {
     } catch (error) {
       console.log("Appwrite service :: getBooking :: error " + error);
       return false;
+    }
+  }
+
+  //Delete a Helpline document
+  async deleteHelpline(documentId) {
+    try {
+      return await this.database.deleteDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteHelplineId,
+        documentId
+      );
+    } catch (error) {
+      console.log("Appwrite service :: deleteHelpline :: error " + error);
+      throw error;
     }
   }
 

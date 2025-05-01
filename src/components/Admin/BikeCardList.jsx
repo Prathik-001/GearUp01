@@ -5,10 +5,6 @@ import { MdElectricCar } from "react-icons/md";
 const BikeCardList = ({ vehicle, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
 
-  const handleModify = (id) => {
-    console.log("Modify vehicle with id:", id);
-    // you can trigger a modal/form here
-  };
 
   const handleConfirmDelete = () => {
     onDelete(vehicle.$id);
@@ -50,14 +46,7 @@ const BikeCardList = ({ vehicle, onDelete }) => {
             </span>
           </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => handleModify(vehicle.id)}
-            className="text-blue-500 hover:text-blue-700 transition-colors duration-200 p-2"
-            aria-label="Modify vehicle"
-          >
-            <FaEdit size={18} />
-          </button>
+        <div className="flex gap-1">
           <button
             onClick={handleConfirmDelete}
             className="text-red-500 hover:text-red-700 transition-colors duration-200 p-2"

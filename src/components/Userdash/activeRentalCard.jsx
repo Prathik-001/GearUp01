@@ -1,6 +1,7 @@
 import React from "react";
 import { format, differenceInCalendarDays, isAfter } from "date-fns";
 import { FaPhone } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const ActiveRental = ({ rental, onDelete }) => {
   const today = new Date();
@@ -44,9 +45,6 @@ const ActiveRental = ({ rental, onDelete }) => {
           </div>
 
           <div className="flex gap-4 flex-wrap">
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">
-              Extend Rental
-            </button>
             <button
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105"
               onClick={() => onDelete(rental.$id)}
@@ -55,6 +53,7 @@ const ActiveRental = ({ rental, onDelete }) => {
             >
               Cancel Rental
             </button>
+            <Link to={"/helpline"}>
             <button
               className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
               aria-label="Contact support"
@@ -63,6 +62,7 @@ const ActiveRental = ({ rental, onDelete }) => {
               <FaPhone className="inline mr-2" />
               Contact Support
             </button>
+            </Link>
           </div>
         </div>
       </div>

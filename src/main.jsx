@@ -33,6 +33,9 @@ import ActiveRental from './components/Userdash/activeRentalCard.jsx';
 import { ToastContainer } from 'react-toastify';
 import CarCardList from './components/Admin/CarCardList.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
+import TermsAndConditions from './components/Terms and condition/TermsAndCondition.jsx';
+import HelpLine from './components/Terms and condition/HelpLine.jsx';
+import userHelpline from './components/Admin/UserHelpline.jsx';
 const router= createBrowserRouter([
   {
     path:"/",
@@ -152,6 +155,20 @@ const router= createBrowserRouter([
       {
         path:"/activerental",
         element:<ActiveRental/>
+      },
+      {
+        path:"/terms-and-conditions",
+        element:<TermsAndConditions/>
+      },
+      {
+        path:"/helpline",
+        element:<ProtectedRoute>
+        <HelpLine/>
+        </ProtectedRoute>
+      },
+      {
+        path:"/userhelpline",
+        element:<userHelpline/>
       }
     ],
   },

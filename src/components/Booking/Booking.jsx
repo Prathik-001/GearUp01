@@ -3,7 +3,10 @@ import { Calendar, MapPin, Car, Fuel, CreditCard, IndianRupee, Check, Receipt } 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import service from '../../appright/conf.js';
+import authService from '../../appright/auth';
 import PaymentRecipt from './PaymentRecipt.jsx';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const locations = [
   'Mumbai, Maharashtra',
@@ -22,7 +25,8 @@ const Booking = () => {
   const selectedCar = locationRouter.state?.car;
   const selectedVehicle = selectedCar || selectedBike;
   const navigate = useNavigate();
-  const userId = useSelector((state) => state.auth.userId);
+  const reduxUserId = useSelector((state) => state.auth.userId); // Redux state
+
   const vehicleId = selectedVehicle?.$id;
 
   const [vehicleData, setVehicleData] = useState({
@@ -40,12 +44,12 @@ const Booking = () => {
     cardNumber: '',
     expiryMonth: '',
     expiryYear: '',
-    cvv: ''
+    cvv: '',
+    termsAccepted: false,
   });
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     if (selectedVehicle) {
@@ -63,11 +67,7 @@ const Booking = () => {
       const start = new Date(bookingData.fromDate);
       const end = new Date(bookingData.toDate);
       const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-      if (days > 0) {
-        setTotalPrice(days * vehicleData.rentPrice);
-      } else {
-        setTotalPrice(0);
-      }
+      setTotalPrice(days > 0 ? days * vehicleData.rentPrice : 0);
     }
   }, [bookingData.fromDate, bookingData.toDate, vehicleData.rentPrice]);
 
@@ -77,27 +77,61 @@ const Booking = () => {
   };
 
   const handleCardNumberChange = (e) => {
-    let value = e.target.value.replace(/\D/g, '').slice(0, 16);
+    const value = e.target.value.replace(/\D/g, '').slice(0, 16);
     const formatted = value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
     setBookingData((prev) => ({ ...prev, cardNumber: formatted }));
   };
 
+  const handleTermsChange = (e) => {
+    setBookingData((prev) => ({ ...prev, termsAccepted: e.target.checked }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { fromDate, toDate, location, paymentMethod, cardNumber, expiryMonth, expiryYear, cvv } = bookingData;
+    const {
+      fromDate,
+      toDate,
+      location,
+      paymentMethod,
+      cardNumber,
+      expiryMonth,
+      expiryYear,
+      cvv,
+    } = bookingData;
 
     if (!fromDate || !toDate || !location || !paymentMethod) {
       alert('Please fill all fields');
       return;
     }
 
-    // Check if payment is not cash, and if card details are missing
-    if ((paymentMethod === 'credit' || paymentMethod === 'debit') && (!cardNumber || !expiryMonth || !expiryYear || !cvv)) {
+    if (!bookingData.termsAccepted) {
+      alert('Please accept the terms and conditions to proceed.');
+      return;
+    }
+
+    if (
+      (paymentMethod === 'credit' || paymentMethod === 'debit') &&
+      (!cardNumber || !expiryMonth || !expiryYear || !cvv)
+    ) {
       alert('Please complete your card details.');
       return;
     }
 
     setLoading(true);
+
+    let userId = reduxUserId;
+    if (!userId) {
+      try {
+        const currentUser = await authService.getCurrentUser();
+        userId = currentUser?.$id;
+        if (!userId) throw new Error("User not authenticated");
+      } catch {
+        alert("User session expired. Please log in again.");
+        setLoading(false);
+        return;
+      }
+    }
+
     try {
       const response = await service.bookingData(
         vehicleData.vehicleName,
@@ -109,30 +143,35 @@ const Booking = () => {
         toDate,
         location,
         vehicleId,
-        cardNumber,    // Should be empty for cash
-        expiryMonth,   // Should be empty for cash
-        expiryYear,    // Should be empty for cash
+        cardNumber,
+        expiryMonth,
+        expiryYear,
         "pending",
         userId
       );
 
       if (response) {
         console.log("Booking successful", response);
-        setTimeout(() => {
-          navigate("/receipt", {
-            state: {
-              vehicleName: vehicleData.vehicleName,
-              fromDate: bookingData.fromDate,
-              toDate: bookingData.toDate,
-              location: bookingData.location,
-              totalAmount: totalPrice,
-              paymentMethod: bookingData.paymentMethod, // Add paymentMethod to receipt
-            },
-          });
-        }, 500);
+        toast.success("Booking successful!", {
+          position: "top-center",
+          className: "bg-green-600 text-white font-bold rounded-lg shadow-lg",
+          bodyClassName: "text-sm",
+          progressClassName: "bg-white",
+          theme: "light",
+        });
+        navigate("/receipt", {
+          state: {
+            vehicleName: vehicleData.vehicleName,
+            fromDate,
+            toDate,
+            location,
+            totalAmount: totalPrice,
+            paymentMethod,
+          },
+        });
       }
-    } catch (error) {
-      console.error("Booking error", error);
+    } catch (err) {
+      console.error("Booking error", err);
     } finally {
       setLoading(false);
     }
@@ -309,12 +348,39 @@ const Booking = () => {
               </div>
             )}
           </div>
+           
+           {/* Total Price Display */}
+            {totalPrice > 0 && (
+            <div className="bg-blue-50 p-6 rounded-xl">
+              <p className="text-2xl font-bold text-blue-900 text-center">
+                Total Price: ₹{totalPrice.toLocaleString()}
+              </p>
+              <p className="text-center text-sm text-blue-600 mt-1">
+                for {Math.ceil((new Date(bookingData.toDate).getTime() - new Date(bookingData.fromDate).getTime()) / (1000 * 60 * 60 * 24))} days
+              </p>
+            </div>
+          )}
+        
+            {/* Terms and Conditions */}
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="terms"
+              name="termsAccepted"
+              checked={bookingData.termsAccepted}
+              onChange={handleTermsChange}
+              className="h-5 w-5 text-blue-600 border-gray-300 rounded"
+            />
+            <label htmlFor="terms" className="text-sm text-gray-700">
+              I accept the <Link to={"/terms-and-conditions"} className="text-blue-600 hover:underline">Terms and Conditions</Link>
+            </label>
+          </div>
 
           {/* Submit Button */}
           <div className="flex justify-center mt-6">
-            <button
+          <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !bookingData.termsAccepted}
               className="bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg focus:outline-none hover:bg-blue-700 disabled:bg-gray-400"
             >
               {loading ? 'Booking...' : 'Book Now'}

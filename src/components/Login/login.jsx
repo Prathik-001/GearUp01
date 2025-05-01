@@ -4,9 +4,6 @@ import {
   FaLock,
   FaEye,
   FaEyeSlash,
-  FaGoogle,
-  FaApple,
-  FaFacebook,
 } from "react-icons/fa";
 import authService from "../../appright/auth";
 import { useNavigate, Link } from "react-router-dom";
@@ -88,13 +85,28 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center px-4 py-8">
+    <div className="relative min-h-screen bg-gray-100 overflow-hidden">
+    {/* Full Screen Background */}
+    <div
+      className="absolute inset-0 z-0 "
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+    </div>
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="max-w-md w-full bg-white shadow-xl rounded-2xl p-8 space-y-6"
-      >
+        className="max-w-md w-full bg-white backdrop-blur-sm shadow-xl rounded-2xl p-8 space-y-6"
+      > 
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
           <p className="text-sm text-gray-500">Login to your account</p>
@@ -157,13 +169,6 @@ const LoginPage = () => {
             {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
           </div>
 
-          {/* Forgot Password */}
-          <div className="text-right text-sm">
-            <Link to="/forgot-password" className="text-blue-600 hover:underline">
-              Forgot Password?
-            </Link>
-          </div>
-
           {/* Submit */}
           <button
             type="submit"
@@ -184,6 +189,7 @@ const LoginPage = () => {
           </Link>
         </p>
       </motion.div>
+    </div>
     </div>
   );
 };

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { FiUsers, FiTruck, FiBookOpen, FiDollarSign, FiMenu } from "react-icons/fi";
 import { FaCar, FaMotorcycle, FaUser } from "react-icons/fa";
+import { FaHeadset } from "react-icons/fa6";
 import { MdDirectionsBike, MdDirectionsCar } from "react-icons/md";
 import { Link } from "react-router-dom";
 import service from "../../appright/conf";
 import CarCardList from "./CarCardList";
 import BikeCardList from "./BikeCardList";
+import UserSubmissionList from "./UserHelpline";
+
 import UserData from "./UserData";
 import VehicleRentalBookingRow from "./AdminBooking";
 import { toast } from "react-toastify";
@@ -18,6 +21,7 @@ const AdminPanel = () => {
   const [car, setCarVehicles] = useState([]);
   const [user, setUserData] = useState([]);
   const [booking, setBooking] = useState([]);
+  const [helpline, setHelpline] = useState([]);
 
   // Fetch all data
   useEffect(() => {
@@ -25,6 +29,7 @@ const AdminPanel = () => {
     service.getAllBikesData().then(setBikeVehicles).catch(console.error);
     service.getAllCarsData().then(setCarVehicles).catch(console.error);
     service.getAllBookingsData().then(setBooking).catch(console.error);
+    service.getAllHelpline().then(setHelpline).catch(console.error);
   }, []);
 
   // Dashboard
@@ -311,6 +316,48 @@ const AdminPanel = () => {
       </div>
     </div>
   );
+
+  // Helpline Section
+  const handleDeleltehelpline = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This Helpline will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6", // Blue button
+      cancelButtonColor: "#d33",     // Red cancel button
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        await service.deleteHelpline(id);
+        await Swal.fire(
+          "Deleted!",
+          "The Helpline has been deleted successfully.",
+          "success"
+        );
+        setCarVehicles((prev) => prev.filter((item) => item.$id !== id));
+      } catch (err) {
+        console.error(err);
+        Swal.fire(
+          "Error!",
+          "There was a problem deleting the Helpline.",
+          "error"
+        );
+      }
+    }
+  };
+  
+
+  const HelplineSection = () => (
+    <div>
+  
+                <UserSubmissionList onDelete={handleDeleltehelpline} />
+    </div>
+  );
+
   
     return (
       <div className="flex h-screen bg-gray-100">
@@ -363,6 +410,14 @@ const AdminPanel = () => {
               <FiBookOpen className="text-xl" />
               {isSidebarOpen && <span className="ml-4">Bookings</span>}
             </button>
+            <button
+              onClick={() => setActiveSection("helpline")}
+              className={`w-full p-4 flex items-center ${activeSection === "helpline" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-blue-50 hover:text-blue-600`}
+            >
+              <FaHeadset className="text-xl" />
+              {isSidebarOpen && <span className="ml-4">Helpline</span>}
+            </button>
+            
           </nav>
         </div>
   
@@ -380,6 +435,7 @@ const AdminPanel = () => {
             booking={booking}
             users={user}
             handleDeleteBooking={handleDeleteBooking}/>}
+          {activeSection === "helpline" && <HelplineSection />}
         </div>
       </div>
     );

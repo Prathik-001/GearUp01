@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../store/authSlice"
 import service from "../../appright/conf";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -366,7 +367,7 @@ const Signup = () => {
               onChange={handleChange}
             />
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
-              I agree to the <a href="#" className="text-indigo-600 hover:text-indigo-500">Terms</a> and <a href="#" className="text-indigo-600 hover:text-indigo-500">Privacy Policy</a>
+        I agree to the <Link to={"/terms-and-conditions"} className="text-indigo-600 hover:text-indigo-500">Terms and Privacy Policy</Link>
             </label>
           </div>
 

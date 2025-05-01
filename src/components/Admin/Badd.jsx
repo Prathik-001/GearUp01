@@ -4,6 +4,7 @@ import { FiUpload } from "react-icons/fi";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import service from "../../appright/conf";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const VehicleRentalForm = () => {
   const userId = useSelector((state) => state.auth.userId);
@@ -135,7 +136,13 @@ const VehicleRentalForm = () => {
 
         if (res) {
           console.log(res);
-          alert("Data added");
+            toast.success("Bike added successfully!", {
+              position: "top-center",
+              className: "bg-green-600 text-white font-bold rounded-lg shadow-lg",
+              bodyClassName: "text-sm",
+              progressClassName: "bg-white",
+              theme: "light",
+            });
           console.log(userId);
           
           setFormData({
@@ -160,6 +167,13 @@ const VehicleRentalForm = () => {
       }
     } catch (error) {
       console.log(error);
+      toast.error("Error adding vehicle. Please try again.", {
+        position: "top-center",
+        className: "bg-red-600 text-white font-bold rounded-lg shadow-lg",
+        bodyClassName: "text-sm",
+        progressClassName: "bg-white",
+        theme: "light",
+      });
     } finally {
       setLoading(false);
     }

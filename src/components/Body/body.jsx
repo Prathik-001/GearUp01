@@ -3,51 +3,51 @@ import { Link } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaCar, FaMotorcycle, FaCalendarAlt, FaMoneyBillWave, FaCarSide, FaBookmark } from "react-icons/fa";
 import { BsStarFill } from "react-icons/bs";
+import service from "../../appright/conf";
 
 const HomePage = () => {
-
+  
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 19) % testimonials.length);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, []);
+  9
   const testimonials = [
     {
       name: "John Davis",
       vehicle: "BMW 3 Series",
-      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
       quote: "Best rental experience I've ever had. The car was immaculate and the service was exceptional."
     },
     {
       name: "Sarah Wilson",
       vehicle: "Ducati Monster",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
       quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
     },
     {
       name: "Roshan",
-      vehicle: "Fz",
-      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
-      quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
+      vehicle: "Royal Enfield",
+      quote: "Driving with GearUp was smooth, reliable, and stress-free — from booking to return, the experience was top-tier. I will definitely gear up again for my next adventure!"
     },
     {
       name: "Avin",
-      vehicle: "Fz",
-      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
-      quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
+      vehicle: "Tvs Ntorq",
+      quote: "I was impressed with the quality of the vehicle and the professionalism of the staff. GearUp is my go-to for rentals!"
     },
     {
       name: "Harsha",
-      vehicle: "Fz",
-      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
-      quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
+      vehicle: "Swift",
+      quote: "GearUp made my trip unforgettable. The car was in perfect condition, and the staff was incredibly helpful. Highly recommend!"
     },
     {
       name: "Ashrith",
-      vehicle: "Fz",
-      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5",
-      quote: "Fantastic selection of bikes and very competitive prices. Will definitely use again!"
-    },
-    
+      vehicle: "Duster",
+      quote: "Seamless booking, well-maintained car, and exceptional support — GearUp turned travel into a pleasure."
+    }
   ];
-
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -153,11 +153,6 @@ const HomePage = () => {
           <div className="max-w-3xl mx-auto">
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="flex items-center mb-6">
-                <img
-                  src={testimonials[currentTestimonial].image}
-                  alt={testimonials[currentTestimonial].name}
-                  className="w-16 h-16 rounded-full object-cover"
-                />
                 <div className="ml-4">
                   <h3 className="font-bold text-lg">{testimonials[currentTestimonial].name}</h3>
                   <p className="text-gray-600">{testimonials[currentTestimonial].vehicle}</p>
@@ -187,27 +182,27 @@ const HomePage = () => {
             <div>
               <h4 className="font-bold mb-4">Quick Links</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white">About Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Vehicles</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Terms & Conditions</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                <Link to={"/about"} className="text-gray-400 hover:text-white">About Us</Link>
+                <li><Link to={'/shedule'} className="text-gray-400 hover:text-white">Vehicles</Link></li>
+                <li><Link to={'/terms-and-conditions'} className="text-gray-400 hover:text-white">Terms & Conditions</Link></li>
+                <li><Link to={'/helpline'} className="text-gray-400 hover:text-white">HelpLine</Link>  </li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Contact</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>123 Rental Street</li>
-                <li>New York, NY 10001</li>
-                <li>Phone: (555) 123-4567</li>
+                <li>Moodubudre, Karnataka</li>
+                <li>Phone:+91 8867022166</li>
                 <li>Email: info@gearup.com</li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Follow Us</h4>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white">Facebook</a>
-                <a href="#" className="text-gray-400 hover:text-white">Twitter</a>
-                <a href="#" className="text-gray-400 hover:text-white">Instagram</a>
+                <a href="#=https://www.facebook.com/" className="text-gray-400 hover:text-white">Facebook</a>
+                <a href="https://x.com/?lang=en-in" className="text-gray-400 hover:text-white">Twitter</a>
+                <a href="https://www.instagram.com/?hl=en" className="text-gray-400 hover:text-white">Instagram</a>
               </div>
             </div>
           </div>

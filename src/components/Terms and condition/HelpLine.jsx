@@ -102,7 +102,7 @@ const VehicleRentalSupport = () => {
 
       if (res) {
         console.log(res);
-        toast.success("Data added successfully!");
+        toast.success("Reported successfully!");
         setFormData({
           fullName: "",
           email: "",

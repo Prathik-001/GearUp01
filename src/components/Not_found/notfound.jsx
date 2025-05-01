@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaHome, FaCar, FaPhone, FaSearch } from "react-icons/fa";
+import { SiFoursquarecityguide } from "react-icons/si";
 import { MdDirectionsCar } from "react-icons/md";
 import{Link} from "react-router-dom"
 
@@ -37,28 +38,26 @@ const NotFound = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+          <Link to={"/terms-and-conditions"}> 
           <button className="flex items-center justify-center space-x-2 py-3 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-gray-700">
-            <FaCar className="text-lg" />
-            <span>Rent a Vehicle</span>
+            <SiFoursquarecityguide  className="text-lg" />
+            <span>Terms And Condition</span>
           </button>
+          </Link>
+          <Link to={'/shedule'}>
           <button className="flex items-center justify-center space-x-2 py-3 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-gray-700">
             <FaSearch className="text-lg" />
             <span>Browse Vehicles</span>
           </button>
+          </Link>
+          <Link to={'/helpline'}>
           <button className="flex items-center justify-center space-x-2 py-3 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-gray-700">
             <FaPhone className="text-lg" />
             <span>Contact Support</span>
           </button>
+          </Link>
         </div>
 
-        <div className="text-center mt-8">
-          <p className="text-sm text-gray-500">
-            Found a broken link? {" "}
-            <button className="text-blue-600 hover:underline focus:outline-none">
-              Report it here
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );

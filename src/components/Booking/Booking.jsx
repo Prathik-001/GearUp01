@@ -274,7 +274,6 @@ const Booking = () => {
                 >
                   <option value="credit">Credit Card</option>
                   <option value="debit">Debit Card</option>
-                  <option value="cash">Cash on Spot</option>
                 </select>
               </div>
             </div>

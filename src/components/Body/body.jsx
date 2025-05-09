@@ -192,7 +192,7 @@ const HomePage = () => {
               <h4 className="font-bold mb-4">Contact</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>123 Rental Street</li>
-                <li>Moodubudre, Karnataka</li>
+                <li>Moodubidre, Karnataka</li>
                 <li>Phone:+91 8867022166</li>
                 <li>Email: info@gearup.com</li>
               </ul>
